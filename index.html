@@ -298,7 +298,7 @@
           </div>
         </article>
 
-        <article class="card">
+        <article class="card" style="display:none;" aria-hidden="true">
           <h3>云同步配置</h3>
           <p class="tips">没有 Supabase 配置时，页面仍可本地预览，但不能双方同步。当前网站已内置云同步配置。正常情况下不用再填写 Supabase 信息，双方打开同一个网址后，只需要输入共同编辑密码即可编辑。</p>
           <div class="form-grid">
@@ -437,7 +437,7 @@ begin
   where id = p_id;
 
   if v_hash is null then
-    return true;
+    return false;
   end if;
 
   return v_hash = crypt(p_password, v_hash);
@@ -459,19 +459,17 @@ begin
     raise exception '编辑密码至少需要 4 位';
   end if;
 
-  if exists (select 1 from public.couple_sites where id = p_id) then
-    update public.couple_sites
-    set data = p_data,
-        updated_at = now()
-    where id = p_id
-      and password_hash = crypt(p_password, password_hash);
+  update public.couple_sites
+  set data = p_data,
+      updated_at = now()
+  where id = p_id
+    and password_hash = crypt(p_password, password_hash);
 
-    if not found then
-      raise exception '编辑密码错误';
+  if not found then
+    if not exists (select 1 from public.couple_sites where id = p_id) then
+      raise exception '网站还没有初始化密码，请先在 Supabase SQL Editor 初始化';
     end if;
-  else
-    insert into public.couple_sites (id, data, password_hash)
-    values (p_id, p_data, crypt(p_password, gen_salt('bf')));
+    raise exception '编辑密码错误';
   end if;
 
   return (select data from public.couple_sites where id = p_id);
