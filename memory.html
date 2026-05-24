@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="description" content="一个可以记录恋爱天数、时间轴、照片墙、情侣日记和愿望清单的双人纪念网站。" />
+  <meta name="description" content="一个可以记录恋爱天数、时间轴、情侣日记和愿望清单的双人纪念网站。" />
   <meta name="theme-color" content="#ff8fab" />
   <title>我们的恋爱纪念馆</title>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -2037,7 +2037,6 @@
     <nav class="links" aria-label="主导航">
       <a href="#days">恋爱天数</a>
       <a href="#timeline">时间轴</a>
-      <a href="#album">照片墙</a>
       <a href="#diary">情侣日记</a>
       <a href="#wishes">愿望清单</a>
       <a href="#note">今日小纸条</a>
@@ -2050,7 +2049,7 @@
       <div>
         <div class="kicker">💌 慢慢记录 · 双方同步编辑</div>
         <h1><span id="heroNames">我们</span>的<br><span class="gradient-text">恋爱纪念馆</span></h1>
-        <p class="lead" id="heroText">这里收藏我们的日常、照片、纪念日和那些很小却很珍贵的瞬间。以后每一次想起，都可以回到这里看看。</p>
+        <p class="lead" id="heroText">这里收藏我们的日常、纪念日和那些很小却很珍贵的瞬间。以后每一次想起，都可以回到这里看看。</p>
         <div class="hero-actions">
           <a class="btn" href="#timeline">查看我们的故事</a>
           <a class="btn secondary" href="#diary">看看最近日记</a>
@@ -2099,7 +2098,7 @@
       <div class="timeline" id="timelineList"></div>
     </section>
 
-    <section class="shell" id="album">
+    <section class="shell" id="album" style="display:none !important;" aria-hidden="true">
       <div class="section-head">
         <div><h2>3D 旋转照片墙</h2><p>照片会围成一个可以旋转的立体相册。自动播放时慢慢转动，鼠标移上去会暂停，点击任意照片可以放大查看。</p></div>
       </div>
@@ -2204,7 +2203,7 @@
             <div class="toolbar"><button class="mini" id="addEvent" type="button">添加事件</button><button class="mini danger" id="clearEvents" type="button">清空时间轴</button></div>
           </article>
 
-          <article class="card" style="margin-top:18px;">
+          <article class="card" style="margin-top:18px; display:none !important;" aria-hidden="true">
             <h3>3D 照片墙管理</h3>
             <p class="tips">可以粘贴网络图片链接，也可以一次选择多张本地照片。登录编辑后，照片会同步进入 3D 旋转照片墙；你还可以修改标题、替换图片、调整顺序和删除照片。</p>
             <div class="form-grid">
@@ -2274,7 +2273,7 @@
 
   <footer class="shell footer"><p>愿这个小网站，陪你们记录很多很多年。❤</p></footer>
   <div class="toast" id="toast">已保存</div>
-  <div class="lightbox" id="lightbox" role="dialog" aria-modal="true" aria-label="照片预览">
+  <div class="lightbox" id="lightbox" role="dialog" aria-modal="true" aria-label="照片预览" style="display:none !important;" aria-hidden="true">
     <button class="lightbox-close" id="closeLightbox" type="button" aria-label="关闭照片预览">×</button>
     <button class="lightbox-nav prev" id="lightboxPrev" type="button" aria-label="上一张照片">‹</button>
     <button class="lightbox-nav next" id="lightboxNext" type="button" aria-label="下一张照片">›</button>
@@ -2488,7 +2487,7 @@ grant execute on function public.save_couple_site(text, jsonb, text) to anon, au
       siteName: '我们的恋爱纪念馆',
       names: '我们',
       startDate: '2024-05-20',
-      heroText: '这里收藏我们的日常、照片、纪念日和那些很小却很珍贵的瞬间。以后每一次想起，都可以回到这里看看。',
+      heroText: '这里收藏我们的日常、纪念日和那些很小却很珍贵的瞬间。以后每一次想起，都可以回到这里看看。',
       heroImage: samplePhoto('我们的首页封面', '💞', '#ff8fab', '#ffd6a5'),
       events: [
         { date: '2024-05-20', title: '故事开始的那一天', text: '从这一天开始，我们多了一个一起记录生活的理由。' },
@@ -2759,7 +2758,7 @@ grant execute on function public.save_couple_site(text, jsonb, text) to anon, au
         ['今天也要好好相爱', '把今天的小开心存进这里，等以后回头看的时候，会发现普通日子也闪闪发光。', '陪伴'],
         ['普通的一天也值得纪念', '不一定每天都有大事发生，但一起吃饭、聊天、散步，本身就已经很珍贵。', '日常'],
         ['给彼此多一点耐心', '恋爱不是永远完美，而是遇到小情绪时，依然愿意靠近一点点。', '温柔'],
-        ['继续制造新的回忆', '照片墙、时间轴和日记都会越来越满，像一本慢慢写出来的恋爱书。', '记录'],
+        ['继续制造新的回忆', '时间轴、日记和愿望清单都会越来越满，像一本慢慢写出来的恋爱书。', '记录'],
         ['今天适合说一句想你', '有些话不用等到节日才说，今天就很适合。', '想念']
       ];
       const item = notes[Math.abs(days || 0) % notes.length];
