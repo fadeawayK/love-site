@@ -1988,6 +1988,240 @@
       }
     }
 
+  
+
+/* === 本版新增：全屏照片预览、照片浏览保护、鼠标拖拽 3D 相册、胶带解结导航 === */
+.album-stage {
+  cursor: grab;
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: pan-y;
+}
+.album-stage.dragging {
+  cursor: grabbing;
+}
+.album-stage.dragging .album3d {
+  transition: none !important;
+}
+.album-card,
+.album-card img,
+.lightbox img,
+.photo-manage-item img {
+  -webkit-user-drag: none;
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-touch-callout: none;
+}
+.album-stage::after {
+  content: "拖动旋转 · 点击全屏查看" !important;
+}
+.lightbox {
+  position: fixed !important;
+  inset: 0 !important;
+  width: 100vw !important;
+  height: 100vh !important;
+  height: 100dvh !important;
+  z-index: 99999 !important;
+  padding: clamp(14px, 3vw, 34px) !important;
+  background:
+    radial-gradient(circle at 50% 42%, rgba(255,143,171,.20), transparent 34%),
+    rgba(18, 10, 14, .90) !important;
+  backdrop-filter: blur(18px) saturate(1.15) !important;
+}
+body.lightbox-open {
+  overflow: hidden !important;
+}
+.lightbox-inner {
+  width: min(1180px, calc(100vw - 36px)) !important;
+  max-height: calc(100dvh - 74px) !important;
+  position: relative;
+}
+.lightbox img {
+  max-width: min(100%, 1120px) !important;
+  max-height: calc(100dvh - 140px) !important;
+  width: auto;
+  height: auto;
+  object-fit: contain !important;
+  border-radius: 30px !important;
+  box-shadow: 0 30px 110px rgba(0,0,0,.48), 0 0 0 1px rgba(255,255,255,.18) inset !important;
+}
+.lightbox-caption {
+  padding: 9px 16px;
+  border-radius: 999px;
+  background: rgba(255,255,255,.13);
+  border: 1px solid rgba(255,255,255,.18);
+  backdrop-filter: blur(14px);
+}
+.lightbox-caption::after {
+  content: "  ·  浏览保护已开启";
+  opacity: .78;
+  font-size: 12px;
+}
+.lightbox-close,
+.lightbox-nav {
+  z-index: 100000 !important;
+}
+.memory-portal {
+  padding-top: 32px;
+  padding-bottom: 46px;
+}
+.portal-shell {
+  position: relative;
+  min-height: 360px;
+  border-radius: 40px;
+  overflow: hidden;
+  padding: clamp(22px, 4vw, 42px);
+  background:
+    radial-gradient(circle at 18% 18%, rgba(255,255,255,.70), transparent 23%),
+    radial-gradient(circle at 76% 26%, rgba(255,143,171,.28), transparent 31%),
+    linear-gradient(135deg, rgba(255,255,255,.62), rgba(255,240,246,.42));
+  border: 1px solid rgba(255,255,255,.76);
+  box-shadow: var(--shadow);
+  isolation: isolate;
+}
+.portal-shell::before,
+.portal-shell::after {
+  content: "";
+  position: absolute;
+  inset: -20%;
+  z-index: -1;
+  background-image:
+    radial-gradient(circle, rgba(255,143,171,.42) 0 2px, transparent 2.6px),
+    radial-gradient(circle, rgba(255,214,165,.42) 0 1.5px, transparent 2.2px);
+  background-size: 54px 54px, 82px 82px;
+  animation: portalStars 18s linear infinite;
+  opacity: .55;
+}
+.portal-shell::after {
+  animation-duration: 28s;
+  animation-direction: reverse;
+  filter: blur(.5px);
+}
+@keyframes portalStars {
+  from { transform: translate3d(0,0,0) rotate(0deg); }
+  to { transform: translate3d(-42px,24px,0) rotate(6deg); }
+}
+.portal-head {
+  position: relative;
+  z-index: 2;
+  max-width: 680px;
+}
+.portal-head h2 {
+  font-size: clamp(28px, 4vw, 44px);
+  letter-spacing: -1px;
+  margin-bottom: 10px;
+}
+.portal-head p {
+  color: var(--muted);
+  line-height: 1.75;
+}
+.tape-board {
+  position: relative;
+  z-index: 2;
+  min-height: 220px;
+  margin-top: 18px;
+}
+.memory-tape {
+  position: absolute;
+  min-width: 150px;
+  border: 0;
+  cursor: pointer;
+  padding: 14px 24px;
+  border-radius: 10px;
+  color: #5b3d44;
+  font-weight: 900;
+  background:
+    linear-gradient(90deg, rgba(255,255,255,.36), transparent 18% 82%, rgba(255,255,255,.32)),
+    linear-gradient(135deg, rgba(255,223,232,.94), rgba(255,244,202,.92));
+  box-shadow: 0 16px 32px rgba(255,143,171,.20), inset 0 0 0 1px rgba(255,255,255,.68);
+  transform: rotate(var(--rot)) translateZ(0);
+  transition: transform .28s ease, box-shadow .28s ease, filter .28s ease;
+  backdrop-filter: blur(8px);
+}
+.memory-tape::before,
+.memory-tape::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 16px;
+  opacity: .28;
+  background: repeating-linear-gradient(45deg, #fff, #fff 4px, transparent 4px, transparent 8px);
+}
+.memory-tape::before { left: 8px; }
+.memory-tape::after { right: 8px; }
+.memory-tape:hover {
+  transform: rotate(var(--rot)) translateY(-5px) scale(1.04);
+  box-shadow: 0 24px 48px rgba(255,143,171,.28), inset 0 0 0 1px rgba(255,255,255,.9);
+  filter: saturate(1.06);
+}
+.memory-tape[data-target="#days"] { --rot: -11deg; left: 4%; top: 18px; }
+.memory-tape[data-target="#timeline"] { --rot: 8deg; left: 29%; top: 52px; }
+.memory-tape[data-target="#album"] { --rot: -4deg; left: 58%; top: 22px; }
+.memory-tape[data-target="#diary"] { --rot: 12deg; left: 12%; top: 138px; }
+.memory-tape[data-target="#wishes"] { --rot: -9deg; left: 44%; top: 144px; }
+.memory-tape[data-target="#note"] { --rot: 5deg; left: 72%; top: 132px; }
+.tape-transition {
+  position: fixed;
+  inset: 0;
+  z-index: 99998;
+  display: grid;
+  place-items: center;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity .22s ease;
+  background: radial-gradient(circle at 50% 50%, rgba(255,143,171,.18), rgba(255,247,242,.0) 58%);
+}
+.tape-transition.show { opacity: 1; }
+.tape-knot {
+  position: relative;
+  width: min(560px, 82vw);
+  height: 220px;
+  filter: drop-shadow(0 26px 45px rgba(255,143,171,.28));
+}
+.tape-knot span {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 116%;
+  height: 44px;
+  border-radius: 12px;
+  background:
+    repeating-linear-gradient(90deg, rgba(255,255,255,.34) 0 10px, transparent 10px 20px),
+    linear-gradient(135deg, rgba(255,216,226,.96), rgba(255,245,207,.96));
+  transform-origin: center;
+  transition: transform .74s cubic-bezier(.2,.9,.18,1), opacity .42s ease;
+}
+.tape-knot span:nth-child(1) { transform: translate(-50%, -50%) rotate(28deg); }
+.tape-knot span:nth-child(2) { transform: translate(-50%, -50%) rotate(-24deg); }
+.tape-knot::after {
+  content: "解开回忆胶带中…";
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  padding: 14px 22px;
+  border-radius: 999px;
+  background: rgba(255,255,255,.82);
+  color: var(--primary-dark);
+  font-weight: 900;
+  backdrop-filter: blur(12px);
+}
+.tape-transition.untie .tape-knot span:nth-child(1) { transform: translate(-112%, -80%) rotate(10deg); opacity: .72; }
+.tape-transition.untie .tape-knot span:nth-child(2) { transform: translate(12%, -16%) rotate(-9deg); opacity: .72; }
+@media (max-width: 760px) {
+  .portal-shell { min-height: 500px; }
+  .tape-board { min-height: 330px; }
+  .memory-tape { min-width: 132px; padding: 12px 18px; font-size: 14px; }
+  .memory-tape[data-target="#days"] { left: 5%; top: 20px; }
+  .memory-tape[data-target="#timeline"] { left: 44%; top: 62px; }
+  .memory-tape[data-target="#album"] { left: 18%; top: 128px; }
+  .memory-tape[data-target="#diary"] { left: 50%; top: 185px; }
+  .memory-tape[data-target="#wishes"] { left: 6%; top: 246px; }
+  .memory-tape[data-target="#note"] { left: 50%; top: 286px; }
+  .lightbox img { max-height: calc(100dvh - 128px) !important; border-radius: 22px !important; }
+}
+
   </style>
 </head>
 <body>
@@ -2065,6 +2299,25 @@
       </div>
       <div class="hero-card" id="heroCard">
         <div class="photo-note"><strong id="heroCardTitle">双人编辑版已经准备好啦</strong><span id="heroCardDesc">普通打开只能看，输入共同密码后才能编辑。接入 Supabase 后，双方打开同一个网址即可同步内容。</span></div>
+      </div>
+    </section>
+
+
+
+    <section class="shell memory-portal" id="memoryPortal">
+      <div class="portal-shell">
+        <div class="portal-head">
+          <h2>回忆胶带入口</h2>
+          <p>像解开一团交叉的胶带一样，点开每一段回忆。每个入口都会先轻轻散开，再带你进入对应页面。</p>
+        </div>
+        <div class="tape-board" aria-label="回忆胶带导航">
+          <button class="memory-tape" data-target="#days" type="button">恋爱天数</button>
+          <button class="memory-tape" data-target="#timeline" type="button">时间轴</button>
+          <button class="memory-tape" data-target="#album" type="button">3D 照片墙</button>
+          <button class="memory-tape" data-target="#diary" type="button">情侣日记</button>
+          <button class="memory-tape" data-target="#wishes" type="button">愿望清单</button>
+          <button class="memory-tape" data-target="#note" type="button">今日小纸条</button>
+        </div>
       </div>
     </section>
 
@@ -2206,11 +2459,11 @@
 
           <article class="card" style="margin-top:18px;">
             <h3>3D 照片墙管理</h3>
-            <p class="tips">可以粘贴网络图片链接，也可以选择本地照片。登录编辑后，照片会同步进入 3D 旋转照片墙；你还可以修改标题、替换图片、调整顺序和删除照片。</p>
+            <p class="tips">可以粘贴网络图片链接，也可以一次选择多张本地照片。登录编辑后，照片会同步进入 3D 旋转照片墙；你还可以修改标题、替换图片、调整顺序和删除照片。</p>
             <div class="form-grid">
               <label>照片标题<input id="photoTitle" placeholder="比如：第一次旅行" /></label>
               <label>照片链接<input id="photoUrl" placeholder="可以粘贴网络图片链接" /></label>
-              <label class="full">或者从本地选择/替换照片<input id="photoFile" type="file" accept="image/*" /></label>
+              <label class="full">或者从本地选择/批量上传照片<input id="photoFile" type="file" accept="image/*" multiple /></label>
             </div>
             <div class="edit-hint" id="photoEditHint">正在修改照片：保存后会替换原来的照片信息。</div>
             <div class="toolbar">
@@ -2273,13 +2526,16 @@
   </main>
 
   <footer class="shell footer"><p>愿这个小网站，陪你们记录很多很多年。❤</p></footer>
+
+  <div class="tape-transition" id="tapeTransition" aria-hidden="true"><div class="tape-knot"><span></span><span></span></div></div>
+
   <div class="toast" id="toast">已保存</div>
   <div class="lightbox" id="lightbox" role="dialog" aria-modal="true" aria-label="照片预览">
     <button class="lightbox-close" id="closeLightbox" type="button" aria-label="关闭照片预览">×</button>
     <button class="lightbox-nav prev" id="lightboxPrev" type="button" aria-label="上一张照片">‹</button>
     <button class="lightbox-nav next" id="lightboxNext" type="button" aria-label="下一张照片">›</button>
     <div class="lightbox-inner">
-      <img id="lightboxImg" alt="照片预览" />
+      <img id="lightboxImg" alt="照片预览" draggable="false" />
       <div class="lightbox-caption" id="lightboxCaption"></div>
     </div>
   </div>
@@ -3446,6 +3702,11 @@ grant execute on function public.save_couple_site(text, jsonb, text) to anon, au
       return true;
     }
 
+    function getFileBaseName(file) {
+      const name = file && file.name ? file.name : '我们的照片';
+      return name.replace(/\.[^.]+$/, '') || '我们的照片';
+    }
+
     async function compressImage(file, maxSize = 1200, quality = 0.78) {
       const bitmap = await createImageBitmap(file);
       const scale = Math.min(1, maxSize / Math.max(bitmap.width, bitmap.height));
@@ -3534,31 +3795,49 @@ grant execute on function public.save_couple_site(text, jsonb, text) to anon, au
 
     document.getElementById('addPhoto').addEventListener('click', async () => {
       if (!ensureUnlocked()) return;
-      const title = requireValue('photoTitle','照片标题');
-      if (!title) return;
+      const titleInput = document.getElementById('photoTitle').value.trim();
       const urlInput = document.getElementById('photoUrl').value.trim();
-      const file = document.getElementById('photoFile').files[0];
-      let url = urlInput;
-      if (file) {
-        showToast('正在压缩照片...');
-        url = await compressImage(file);
-      }
-      if (!url && editingPhotoIndex >= 0 && data.photos[editingPhotoIndex]) {
-        url = data.photos[editingPhotoIndex].url;
-      }
-      if (!url) {
-        showToast('请粘贴照片链接或选择本地照片');
-        return;
-      }
+      const fileInput = document.getElementById('photoFile');
+      const files = Array.from(fileInput.files || []);
+
       if (editingPhotoIndex >= 0 && data.photos[editingPhotoIndex]) {
+        let url = urlInput || data.photos[editingPhotoIndex].url;
+        if (files.length > 1) showToast('修改单张照片时只会使用选中的第一张图片');
+        if (files[0]) {
+          showToast('正在压缩照片...');
+          url = await compressImage(files[0]);
+        }
+        const title = titleInput || data.photos[editingPhotoIndex].title || getFileBaseName(files[0]);
         data.photos[editingPhotoIndex] = { ...data.photos[editingPhotoIndex], title, url };
         resetPhotoForm();
         await persistData('照片已修改');
-      } else {
-        data.photos.push({ title, url });
+        return;
+      }
+
+      if (files.length) {
+        showToast(`正在压缩 ${files.length} 张照片...`);
+        for (let i = 0; i < files.length; i++) {
+          const file = files[i];
+          const url = await compressImage(file);
+          const title = files.length === 1
+            ? (titleInput || getFileBaseName(file))
+            : (titleInput ? `${titleInput} ${i + 1}` : getFileBaseName(file));
+          data.photos.push({ title, url });
+        }
+        resetPhotoForm();
+        await persistData(`${files.length} 张照片已添加`);
+        return;
+      }
+
+      if (urlInput) {
+        if (!titleInput) { showToast('请填写照片标题'); return; }
+        data.photos.push({ title: titleInput, url: urlInput });
         resetPhotoForm();
         await persistData('照片已添加');
+        return;
       }
+
+      showToast('请粘贴照片链接或选择本地照片');
     });
 
     document.getElementById('addDiary').addEventListener('click', async () => {
@@ -4617,5 +4896,132 @@ grant execute on function public.save_couple_site(text, jsonb, text) to anon, au
       setTimeout(() => { musicAutoplayAttempted = true; tryPlayMusic(false); }, 650);
     });
   </script>
+
+<script>
+  /* === 本版新增交互：照片浏览保护 + 拖拽 3D 相册 + 胶带解结导航 === */
+  (function () {
+    function safeQuery(selector) { return document.querySelector(selector); }
+
+    function protectPhotoImages() {
+      document.querySelectorAll('.album-stage img, .lightbox img, .photo-manage-item img').forEach(img => {
+        img.setAttribute('draggable', 'false');
+        img.setAttribute('loading', img.getAttribute('loading') || 'lazy');
+        img.addEventListener('dragstart', event => event.preventDefault(), { passive: false });
+        img.addEventListener('contextmenu', event => {
+          event.preventDefault();
+          if (typeof showToast === 'function') showToast('已关闭右键保存，照片仅供浏览');
+        });
+      });
+    }
+
+    function setupLightboxProtection() {
+      const lightbox = safeQuery('#lightbox');
+      if (!lightbox) return;
+      document.body.appendChild(lightbox);
+      const sync = () => {
+        const open = lightbox.classList.contains('show');
+        document.body.classList.toggle('lightbox-open', open);
+        protectPhotoImages();
+      };
+      new MutationObserver(sync).observe(lightbox, { attributes: true, attributeFilter: ['class'] });
+      lightbox.addEventListener('contextmenu', event => {
+        event.preventDefault();
+        if (typeof showToast === 'function') showToast('已开启浏览保护');
+      });
+      sync();
+    }
+
+    function setupAlbumDrag() {
+      const stage = safeQuery('#albumStage');
+      if (!stage) return;
+      let dragging = false;
+      let startX = 0;
+      let startY = 0;
+      let startRotation = 0;
+      let blockedClick = false;
+
+      stage.addEventListener('pointerdown', event => {
+        if (event.target.closest('button, input, textarea, select')) return;
+        dragging = true;
+        blockedClick = false;
+        startX = event.clientX;
+        startY = event.clientY;
+        try { startRotation = albumRotation; albumAutoRotate = false; } catch { startRotation = 0; }
+        stage.classList.add('dragging');
+        try { stage.setPointerCapture(event.pointerId); } catch {}
+      });
+
+      stage.addEventListener('pointermove', event => {
+        if (!dragging) return;
+        const dx = event.clientX - startX;
+        const dy = event.clientY - startY;
+        if (Math.abs(dx) > 5 || Math.abs(dy) > 5) blockedClick = true;
+        try {
+          albumRotation = startRotation + dx * 0.36;
+          applyAlbumTransform();
+        } catch {}
+      });
+
+      function endDrag(event) {
+        if (!dragging) return;
+        dragging = false;
+        stage.classList.remove('dragging');
+        try { stage.releasePointerCapture(event.pointerId); } catch {}
+        setTimeout(() => { blockedClick = false; }, 120);
+      }
+      stage.addEventListener('pointerup', endDrag);
+      stage.addEventListener('pointercancel', endDrag);
+      stage.addEventListener('click', event => {
+        if (!blockedClick) return;
+        event.preventDefault();
+        event.stopImmediatePropagation();
+      }, true);
+    }
+
+    function goWithTape(targetSelector) {
+      const target = safeQuery(targetSelector);
+      if (!target) return;
+      const overlay = safeQuery('#tapeTransition');
+      if (!overlay) {
+        target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        history.replaceState(null, '', targetSelector);
+        return;
+      }
+      overlay.classList.add('show');
+      overlay.classList.remove('untie');
+      requestAnimationFrame(() => overlay.classList.add('untie'));
+      setTimeout(() => {
+        target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        history.replaceState(null, '', targetSelector);
+      }, 420);
+      setTimeout(() => overlay.classList.remove('show', 'untie'), 1100);
+    }
+
+    function setupTapeNavigation() {
+      document.addEventListener('click', event => {
+        const trigger = event.target.closest('.memory-tape, a[href^="#"]');
+        if (!trigger) return;
+        const targetSelector = trigger.dataset.target || trigger.getAttribute('href');
+        if (!targetSelector || targetSelector === '#') return;
+        const target = safeQuery(targetSelector);
+        if (!target) return;
+        event.preventDefault();
+        event.stopImmediatePropagation();
+        goWithTape(targetSelector);
+      }, true);
+    }
+
+    const observer = new MutationObserver(() => protectPhotoImages());
+    observer.observe(document.documentElement, { childList: true, subtree: true });
+
+    window.addEventListener('load', () => {
+      setupLightboxProtection();
+      setupAlbumDrag();
+      setupTapeNavigation();
+      protectPhotoImages();
+    });
+  })();
+</script>
+
 </body>
 </html>
