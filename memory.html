@@ -1818,6 +1818,101 @@
       .floating-actions { right: 12px !important; bottom: 12px !important; }
     }
 
+
+    /* === 当前定制版：恢复原始滚动导航 + 左侧悬浮控制 + 精简编辑登录 === */
+    .section-particle-canvas,
+    .page-flip-overlay { display: none !important; }
+    body.page-particle-switch header,
+    body.page-particle-switch main,
+    body.page-particle-switch footer,
+    body.page-flipping header,
+    body.page-flipping main,
+    body.page-flipping footer {
+      filter: none !important;
+      transform: none !important;
+    }
+    .music-dock {
+      position: fixed !important;
+      left: 18px !important;
+      top: calc(50% - 148px) !important;
+      bottom: auto !important;
+      right: auto !important;
+      z-index: 45 !important;
+      display: grid !important;
+      width: 62px !important;
+      height: 62px !important;
+      padding: 4px !important;
+      border-radius: 50% !important;
+    }
+    .floating-actions {
+      position: fixed !important;
+      left: 27px !important;
+      right: auto !important;
+      top: calc(50% - 70px) !important;
+      bottom: auto !important;
+      z-index: 45 !important;
+      display: grid !important;
+      grid-template-columns: 1fr !important;
+      gap: 10px !important;
+    }
+    .float-btn {
+      width: 44px !important;
+      height: 44px !important;
+    }
+    .music-dock .dock-text,
+    .music-dock .dock-lyric,
+    .music-dock #dockNext {
+      display: none !important;
+    }
+    #music[aria-hidden="true"],
+    .hidden-music-config,
+    .cloud-config-card {
+      display: none !important;
+    }
+    #loginCard .tips {
+      margin-top: 8px;
+    }
+    #loginCard .form-grid {
+      grid-template-columns: minmax(0, 1fr) !important;
+    }
+    #loginCard label:has(#modeText),
+    #refreshCloud,
+    #lockEditor {
+      display: none !important;
+    }
+    #loginCard .toolbar {
+      margin-top: 14px;
+    }
+    #loginCard #unlockEditor {
+      min-width: 128px;
+      background: linear-gradient(135deg, var(--primary), #ffb4c8);
+      color: #fff;
+      border-color: transparent;
+      box-shadow: 0 12px 28px rgba(255,143,171,.30);
+    }
+    @media (max-width: 760px) {
+      .music-dock {
+        left: 10px !important;
+        top: calc(50% - 142px) !important;
+        width: 54px !important;
+        height: 54px !important;
+      }
+      .music-dock button#dockPlay {
+        width: 46px !important;
+        height: 46px !important;
+      }
+      .floating-actions {
+        left: 15px !important;
+        top: calc(50% - 76px) !important;
+      }
+      .float-btn {
+        width: 40px !important;
+        height: 40px !important;
+      }
+      .shell { width: min(1180px, calc(100% - 28px)); }
+      body { padding-left: 0; }
+    }
+
   </style>
 </head>
 <body>
@@ -1974,12 +2069,12 @@
     </section>
 
     <section class="shell editor" id="editorPanel">
-      <div class="section-head"><div><h2>情侣编辑后台</h2><p>接入云数据库后，你和对方打开同一个网址，输入共同编辑密码，就能修改同一份内容。</p></div></div>
+      <div class="section-head"><div><h2>情侣编辑后台</h2><p>输入共同编辑密码后，就可以修改网站内容。</p></div></div>
 
       <div class="grid" style="grid-template-columns:1fr; gap:18px;">
         <article class="card" id="loginCard">
           <h3>输入共同编辑密码</h3>
-          <p class="tips">普通访问者只能浏览；输入密码后才显示编辑表单。第一次云端保存时，这个密码会被设置为以后共同编辑的密码。</p>
+          <p class="tips">普通访问者只能浏览；输入共同密码后才会显示编辑表单。</p>
           <div class="form-grid">
             <label>编辑密码<input id="editPassword" type="password" placeholder="例如：你们自己知道的纪念日密码" /></label>
             <label>当前模式<input id="modeText" disabled /></label>
@@ -1991,7 +2086,7 @@
           </div>
         </article>
 
-        <article class="card">
+        <article class="card cloud-config-card">
           <h3>云同步配置</h3>
           <p class="tips">没有 Supabase 配置时，页面仍可本地预览，但不能双方同步。当前网站已内置云同步配置。正常情况下不用再填写 Supabase 信息，双方打开同一个网址后，只需要输入共同编辑密码即可编辑。</p>
           <div class="form-grid">
@@ -4419,50 +4514,19 @@ grant execute on function public.save_couple_site(text, jsonb, text) to anon, au
 
 
 
-    /* === 用户定制：点击导航时使用翻页效果，不再使用粒子切换 === */
+    /* === 当前定制：导航恢复原始顺滑滚动，不使用粒子/翻页切换 === */
     function initSectionParticleTransitions() {
       const particleCanvas = document.getElementById('sectionParticleCanvas');
       if (particleCanvas) particleCanvas.remove();
-      let flipping = false;
-      const navLinks = document.querySelectorAll('a[href^="#"]');
-      function getSectionTitle(target) {
-        if (!target) return '我们的恋爱纪念馆';
-        const title = target.querySelector('h2, h1, .gradient-text');
-        if (title && title.textContent.trim()) return title.textContent.trim().replace(/\s+/g, ' ');
-        const map = { home: '我们的恋爱纪念馆', days: '恋爱天数', timeline: '时间轴', album: '照片墙', diary: '情侣日记', wishes: '愿望清单', note: '今日小纸条' };
-        return map[target.id] || '下一页';
-      }
-      function playFlipTo(hash) {
-        const target = document.querySelector(hash);
-        if (!target || flipping) return false;
-        flipping = true;
-        const title = getSectionTitle(target);
-        const overlay = document.createElement('div');
-        overlay.className = 'page-flip-overlay';
-        overlay.innerHTML = `<div class="page-flip-sheet"><div class="page-flip-label">${escapeHTML(title)}<span>turning page</span></div></div>`;
-        document.body.appendChild(overlay);
-        document.body.classList.add('page-flipping');
-        requestAnimationFrame(() => overlay.classList.add('show'));
-        setTimeout(() => {
-          target.scrollIntoView({ behavior: 'smooth', block: 'start' });
-          history.replaceState(null, '', hash);
-        }, 260);
-        setTimeout(() => {
-          overlay.classList.remove('show');
-          document.body.classList.remove('page-flipping');
-          setTimeout(() => overlay.remove(), 120);
-          flipping = false;
-        }, 860);
-        return true;
-      }
-      navLinks.forEach(link => {
+      document.querySelectorAll('a[href^="#"]').forEach(link => {
         link.addEventListener('click', event => {
           const hash = link.getAttribute('href');
           if (!hash || hash === '#') return;
           const target = document.querySelector(hash);
           if (!target) return;
           event.preventDefault();
-          playFlipTo(hash);
+          target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          history.replaceState(null, '', hash);
         });
       });
     }
