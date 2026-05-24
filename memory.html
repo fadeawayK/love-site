@@ -2404,9 +2404,6 @@
         <h1><span id="heroNames">我们</span>的<br><span class="gradient-text">恋爱纪念馆</span></h1>
         <p class="lead" id="heroText">这里收藏我们的纪念日倒计时、时间线、同行清单，以及那些很小却很珍贵的瞬间。以后每一次想起，都可以回到这里看看。</p>
         <div class="hero-actions">
-          <a class="btn" href="#timeline">查看时间线</a>
-          <a class="btn secondary" href="#wishes">打开同行清单</a>
-          <button class="btn secondary" id="shareSite" type="button">复制网站链接</button>
           <span class="status-pill"><span class="dot locked" id="cloudDot"></span><span id="cloudText">本地预览模式</span></span>
         </div>
         <div class="stats" aria-label="恋爱统计">
@@ -2425,7 +2422,7 @@
         <article class="card countdown-card"><h3>已经在一起</h3><div class="count-big"><span id="loveDays">0</span><small>天</small></div><p id="startDateText">从某一天开始</p></article>
         <article class="card countdown-card"><h3>距离下一次周年</h3><div class="count-big"><span id="anniversaryLeft">0</span><small>天</small></div><p>每一年都值得认真庆祝，也值得认真期待。</p></article>
         <article class="card countdown-card"><h3>距离下一个整百天</h3><div class="count-big"><span id="nextHundredDay">0</span><small>天</small></div><p id="nextHundredText">距离第 100 天纪念日</p></article>
-        <article class="card countdown-card"><h3>距离特别节点</h3><div class="count-big"><span id="nextLoveDay">0</span><small>天</small></div><p>下一次 520 / 1314 / 特别数字纪念点。</p></article>
+        <article class="card countdown-card"><h3 id="specialCountdownHeading">距离特别节点</h3><div class="count-big"><span id="nextLoveDay">0</span><small>天</small></div><p id="specialCountdownText">下一次 520 / 1314 / 特别数字纪念点。</p></article>
       </div>
       <div class="milestone-countdown" aria-label="纪念日补充信息">
         <div class="milestone-item"><b id="statEvents">0</b><span>已经写进时间线的重要节点</span></div>
@@ -2528,6 +2525,16 @@
               <label class="full"><small style="display:block; color:var(--muted); margin-bottom:8px;">手机打开网站时，这里可以直接从相册选择照片作为首页封面。</small>首页文案<textarea id="inputHeroText" placeholder="写一句你想放在首页的话"></textarea></label>
             </div>
             <div class="toolbar"><button class="mini" id="saveBasic" type="button">保存基础信息</button></div>
+          </article>
+
+          <article class="card" style="margin-top:18px;">
+            <h3>纪念模块设置</h3>
+            <div class="form-grid">
+              <label>特别纪念标题<input id="specialCountdownTitleInput" placeholder="比如：距离她的生日 / 距离下一次旅行" /></label>
+              <label>特别纪念日期<input id="specialCountdownDateInput" type="date" /></label>
+              <label class="full">说明<input id="specialCountdownTextInput" placeholder="比如：下一次 520 / 1314 / 特别数字纪念点。" /></label>
+            </div>
+            <div class="toolbar"><button class="mini" id="saveSpecialCountdown" type="button">保存纪念模块</button></div>
           </article>
 
           <article class="card" style="margin-top:18px;">
@@ -2815,6 +2822,11 @@ grant execute on function public.save_couple_site(text, jsonb, text) to anon, au
       startDate: '2024-05-20',
       heroText: '这里收藏我们的纪念日倒计时、时间线、同行清单，以及那些很小却很珍贵的瞬间。以后每一次想起，都可以回到这里看看。',
       heroImage: samplePhoto('我们的首页封面', '💞', '#ff8fab', '#ffd6a5'),
+      specialCountdown: {
+        title: '距离特别节点',
+        date: '',
+        text: '下一次 520 / 1314 / 特别数字纪念点。'
+      },
       events: [
         { date: '2024-05-20', title: '故事开始的那一天', text: '从这一天开始，我们多了一个一起记录生活的理由。' },
         { date: '2024-06-01', title: '第一次认真约会', text: '那天的天气、路线、聊天内容，也许都会慢慢模糊，但开心的感觉会一直留着。' },
@@ -3083,6 +3095,15 @@ grant execute on function public.save_couple_site(text, jsonb, text) to anon, au
       return Math.ceil((next - current) / 86400000);
     }
 
+    function daysUntilExactDate(dateString) {
+      if (!dateString) return null;
+      const target = new Date(dateString + 'T00:00:00');
+      if (Number.isNaN(target.getTime())) return null;
+      const today = new Date();
+      const current = new Date(today.getFullYear(), today.getMonth(), today.getDate());
+      return Math.max(0, Math.ceil((target - current) / 86400000));
+    }
+
 
     function renderMilestones(days) {
       const nextHundred = Math.ceil(Math.max(days, 1) / 100) * 100;
@@ -3144,7 +3165,17 @@ grant execute on function public.save_couple_site(text, jsonb, text) to anon, au
       document.getElementById('statDiaries').textContent = data.wishes.length;
       document.getElementById('startDateText').textContent = `从 ${formatDate(data.startDate)} 开始`;
       document.getElementById('anniversaryLeft').textContent = nextAnniversaryDays(data.startDate);
+      const customTitle = data.specialCountdown && data.specialCountdown.title ? data.specialCountdown.title : '距离特别节点';
+      const customText = data.specialCountdown && data.specialCountdown.text ? data.specialCountdown.text : '下一次 520 / 1314 / 特别数字纪念点。';
+      const customDate = data.specialCountdown && data.specialCountdown.date ? data.specialCountdown.date : '';
+      const customDays = daysUntilExactDate(customDate);
+      document.getElementById('specialCountdownHeading').textContent = customTitle;
+      document.getElementById('nextLoveDay').textContent = customDate && customDays !== null ? customDays : document.getElementById('nextLoveDay').textContent;
+      document.getElementById('specialCountdownText').textContent = customText;
       renderMilestones(days);
+      if (customDate && customDays !== null) {
+        document.getElementById('nextLoveDay').textContent = customDays;
+      }
       renderDailyNote(days);
 
       setValue('inputSiteName', data.siteName || '');
@@ -3152,6 +3183,9 @@ grant execute on function public.save_couple_site(text, jsonb, text) to anon, au
       setValue('inputStartDate', data.startDate || '');
       setValue('inputHeroImage', data.heroImage || '');
       setValue('inputHeroText', data.heroText || '');
+      setValue('specialCountdownTitleInput', (data.specialCountdown && data.specialCountdown.title) || '距离特别节点');
+      setValue('specialCountdownDateInput', (data.specialCountdown && data.specialCountdown.date) || '');
+      setValue('specialCountdownTextInput', (data.specialCountdown && data.specialCountdown.text) || '下一次 520 / 1314 / 特别数字纪念点。');
       setValue('supabaseUrl', cloudConfig.url || '');
       setValue('supabaseAnon', cloudConfig.anonKey || '');
       setValue('siteId', cloudConfig.siteId || 'our-love-site');
@@ -3170,22 +3204,19 @@ grant execute on function public.save_couple_site(text, jsonb, text) to anon, au
       const list = document.getElementById('timelineList');
       const sorted = data.events
         .map((event, originalIndex) => ({ ...event, originalIndex }))
-        .sort((a,b) => new Date(a.date) - new Date(b.date));
+        .sort((a,b) => new Date(b.date) - new Date(a.date));
       if (!sorted.length) {
         list.innerHTML = '<p class="empty">还没有时间线节点。登录编辑后先添加第一个重要瞬间吧。</p>';
         return;
       }
 
       const hasMore = sorted.length > TIMELINE_PREVIEW_COUNT;
-      const visible = timelineExpanded || !hasMore ? sorted : sorted.slice(-TIMELINE_PREVIEW_COUNT);
+      const visible = timelineExpanded || !hasMore ? sorted : sorted.slice(0, TIMELINE_PREVIEW_COUNT);
       const hiddenCount = Math.max(0, sorted.length - visible.length);
-      const startIndex = sorted.length - visible.length;
       const gap = (!timelineExpanded && hiddenCount > 0)
-        ? `<div class="timeline-gap"><span>前面还有 ${hiddenCount} 个时间节点，点击下方按钮展开完整时间线</span></div>`
+        ? `<div class="timeline-gap"><span>后面还有 ${hiddenCount} 个更早的时间节点，点击下方按钮展开完整时间线</span></div>`
         : '';
-      const body = visible.map((event, localIndex) => {
-        const index = startIndex + localIndex;
-        return `
+      const body = visible.map((event, index) => `
         <article class="trajectory-event reveal ${index % 2 === 0 ? 'left' : 'right'}">
           <div class="trajectory-side">
             <div class="trajectory-date">${escapeHTML(formatDate(event.date))}</div>
@@ -3197,10 +3228,9 @@ grant execute on function public.save_couple_site(text, jsonb, text) to anon, au
             </div>
           </div>
           <div class="trajectory-node" aria-hidden="true"></div>
-        </article>`;
-      }).join('');
+        </article>`).join('');
       const control = hasMore
-        ? `<div class="module-more"><button class="mini" onclick="toggleTimelineView()" type="button">${timelineExpanded ? '收起时间线' : `展开全部 ${sorted.length} 个节点`}</button><span>${timelineExpanded ? '当前显示完整时间线。' : `默认只显示最近 ${TIMELINE_PREVIEW_COUNT} 个节点，避免页面过长。`}</span></div>`
+        ? `<div class="module-more"><button class="mini" onclick="toggleTimelineView()" type="button">${timelineExpanded ? '收起时间线' : `展开全部 ${sorted.length} 个节点`}</button><span>${timelineExpanded ? '当前显示完整时间线（最新内容在最上方）。' : `默认只显示最近 ${TIMELINE_PREVIEW_COUNT} 个节点，避免页面过长。`}</span></div>`
         : '';
       list.innerHTML = gap + body + control;
     }
@@ -3717,23 +3747,28 @@ grant execute on function public.save_couple_site(text, jsonb, text) to anon, au
     function renderWishes() {
       const list = document.getElementById('wishList');
       if (!data.wishes.length) {
-        list.innerHTML = '<p class="empty">还没有清单。登录编辑后先写下一条只属于你们的小目标吧。</p>';
+        list.innerHTML = '<p class="empty">还没有同行清单。登录编辑后先写下一条只属于你们的清单吧。</p>';
         return;
       }
-      const hasMore = data.wishes.length > WISH_PREVIEW_COUNT;
-      const visible = wishListExpanded || !hasMore ? data.wishes : data.wishes.slice(0, WISH_PREVIEW_COUNT);
-      const cards = visible.map((wish, index) => `
+      const sorted = data.wishes.map((wish, index) => ({ ...wish, originalIndex: index }))
+        .sort((a, b) => {
+          if (a.done === b.done) return a.originalIndex - b.originalIndex;
+          return a.done ? 1 : -1;
+        });
+      const hasMore = sorted.length > WISH_PREVIEW_COUNT;
+      const visible = wishListExpanded || !hasMore ? sorted : sorted.slice(0, WISH_PREVIEW_COUNT);
+      const cards = visible.map((wish, orderIndex) => `
         <article class="card promise-card reveal ${wish.done ? 'done' : ''}">
           <div class="promise-top">
-            <span class="promise-tag">清单 ${String(index + 1).padStart(2, '0')}</span>
-            <span class="promise-state">${wish.done ? '已点亮' : '慢慢完成中'}</span>
+            <span class="promise-tag">清单 ${String(orderIndex + 1).padStart(2, '0')}</span>
+            <span class="promise-state">${wish.done ? '已一起实现' : '正在慢慢完成'}</span>
           </div>
           <strong>${escapeHTML(wish.title)}</strong>
           <p>${escapeHTML(wish.text)}</p>
-          ${isEditorUnlocked ? `<div class="toolbar"><button class="mini" onclick="toggleWish(${index})" type="button">${wish.done ? '取消完成' : '标记完成'}</button><button class="mini danger" onclick="removeItem('wishes', ${index})" type="button">删除</button></div>` : ''}
+          ${isEditorUnlocked ? `<div class="toolbar"><button class="mini" onclick="toggleWish(${wish.originalIndex})" type="button">${wish.done ? '取消完成' : '标记完成'}</button><button class="mini danger" onclick="removeItem('wishes', ${wish.originalIndex})" type="button">删除</button></div>` : ''}
         </article>`).join('');
       const control = hasMore
-        ? `<div class="module-more" style="grid-column:1/-1;"><button class="mini" onclick="toggleWishListView()" type="button">${wishListExpanded ? '收起清单' : `查看更多 ${data.wishes.length - WISH_PREVIEW_COUNT} 条`}</button><span>${wishListExpanded ? '当前显示完整同行清单。' : `默认展示前 ${WISH_PREVIEW_COUNT} 条，剩余内容点击后查看。`}</span></div>`
+        ? `<div class="module-more" style="grid-column:1/-1;"><button class="mini" onclick="toggleWishListView()" type="button">${wishListExpanded ? '收起清单' : `查看更多 ${sorted.length - WISH_PREVIEW_COUNT} 条`}</button><span>${wishListExpanded ? '当前显示完整同行清单，未完成事项优先展示。' : `默认优先显示未完成清单，并展示前 ${WISH_PREVIEW_COUNT} 条。`}</span></div>`
         : '';
       list.innerHTML = cards + control;
     }
@@ -3759,9 +3794,22 @@ grant execute on function public.save_couple_site(text, jsonb, text) to anon, au
       requestAnimationFrame(enhanceReveal);
     }
 
+    async function confirmDangerAction(actionLabel) {
+      if (!isEditorUnlocked) { showToast('请先输入密码解锁编辑'); return false; }
+      const typed = prompt(`为防止误触，请输入编辑密码后再${actionLabel}`);
+      if (typed === null) return false;
+      if (typed.trim() !== editPassword) {
+        showToast('密码不正确，未执行操作');
+        return false;
+      }
+      return true;
+    }
+
     async function removeItem(type, index) {
-      if (!isEditorUnlocked) { showToast('请先输入密码解锁编辑'); return; }
       if (!Array.isArray(data[type])) return;
+      const actionMap = { events: '删除该时间线节点', wishes: '删除该同行清单', photos: '删除该照片' };
+      const ok = await confirmDangerAction(actionMap[type] || '执行删除操作');
+      if (!ok) return;
       data[type].splice(index, 1);
       await persistData('已删除');
     }
@@ -3938,6 +3986,16 @@ grant execute on function public.save_couple_site(text, jsonb, text) to anon, au
       await persistData(heroFile ? '主页图片与基础信息已保存' : '基础信息已保存');
     });
 
+    document.getElementById('saveSpecialCountdown').addEventListener('click', async () => {
+      if (!ensureUnlocked()) return;
+      data.specialCountdown = {
+        title: document.getElementById('specialCountdownTitleInput').value.trim() || '距离特别节点',
+        date: document.getElementById('specialCountdownDateInput').value || '',
+        text: document.getElementById('specialCountdownTextInput').value.trim() || '下一次 520 / 1314 / 特别数字纪念点。'
+      };
+      await persistData('纪念模块已保存');
+    });
+
     document.getElementById('addEvent').addEventListener('click', async () => {
       if (!ensureUnlocked()) return;
       const date = requireValue('eventDate','节点日期');
@@ -4021,11 +4079,11 @@ grant execute on function public.save_couple_site(text, jsonb, text) to anon, au
       await persistData('清单已添加');
     });
 
-    document.getElementById('clearEvents').addEventListener('click', async () => { if (ensureUnlocked() && confirm('确定清空时间线吗？')) { data.events = []; await persistData('时间线已清空'); } });
+    document.getElementById('clearEvents').addEventListener('click', async () => { if (!ensureUnlocked()) return; const ok = await confirmDangerAction('清空整个时间线'); if (!ok) return; if (confirm('确定清空时间线吗？')) { data.events = []; await persistData('时间线已清空'); } });
     document.getElementById('clearPhotos').addEventListener('click', async () => { if (ensureUnlocked() && confirm('确定清空照片墙吗？')) { data.photos = []; resetPhotoForm(); await persistData('照片墙已清空'); } });
     const clearDiariesButton = document.getElementById('clearDiaries');
     if (clearDiariesButton) clearDiariesButton.addEventListener('click', async () => { if (ensureUnlocked() && confirm('确定清空日记吗？')) { data.diaries = []; await persistData('日记已清空'); } });
-    document.getElementById('clearWishes').addEventListener('click', async () => { if (ensureUnlocked() && confirm('确定清空同行清单吗？')) { data.wishes = []; await persistData('同行清单已清空'); } });
+    document.getElementById('clearWishes').addEventListener('click', async () => { if (!ensureUnlocked()) return; const ok = await confirmDangerAction('清空整个同行清单'); if (!ok) return; if (confirm('确定清空同行清单吗？')) { data.wishes = []; await persistData('同行清单已清空'); } });
     document.getElementById('resetAll').addEventListener('click', async () => { if (ensureUnlocked() && confirm('确定恢复默认示例吗？当前内容会被覆盖。')) { data = clone(defaultData); await persistData('已恢复默认示例'); } });
 
     document.getElementById('exportData').addEventListener('click', () => {
@@ -4059,14 +4117,17 @@ grant execute on function public.save_couple_site(text, jsonb, text) to anon, au
     });
 
 
-    document.getElementById('shareSite').addEventListener('click', async () => {
-      try {
-        await navigator.clipboard.writeText(location.href.split('#')[0]);
-        showToast('网站链接已复制');
-      } catch {
-        showToast('复制失败，可以手动复制浏览器地址栏链接');
-      }
-    });
+    const shareSiteBtn = document.getElementById('shareSite');
+    if (shareSiteBtn) {
+      shareSiteBtn.addEventListener('click', async () => {
+        try {
+          await navigator.clipboard.writeText(location.href.split('#')[0]);
+          showToast('网站链接已复制');
+        } catch {
+          showToast('复制失败，可以手动复制浏览器地址栏链接');
+        }
+      });
+    }
 
     document.getElementById('backTop').addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
     document.getElementById('surpriseBtn').addEventListener('click', event => {
