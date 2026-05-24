@@ -1024,22 +1024,230 @@
       .music-dock.playing::before, .music-dock.playing::after { animation: none !important; }
     }
 
+
+    /* === 3D 粒子开场 / 粒子切换 / 歌词音乐图标：定制版 === */
+    .intro-gate {
+      background:
+        radial-gradient(circle at 18% 18%, rgba(255, 143, 171, .30), transparent 30%),
+        radial-gradient(circle at 78% 20%, rgba(255, 214, 165, .24), transparent 28%),
+        radial-gradient(circle at 50% 82%, rgba(172, 115, 255, .20), transparent 32%),
+        linear-gradient(135deg, #150915 0%, #33162a 45%, #120b1f 100%);
+      perspective: 1200px;
+    }
+    .intro-gate::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      background:
+        linear-gradient(rgba(255,255,255,.035) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,.035) 1px, transparent 1px);
+      background-size: 42px 42px;
+      mask-image: radial-gradient(circle at center, #000 0%, transparent 72%);
+      animation: introGridFloat 12s linear infinite;
+    }
+    @keyframes introGridFloat { from { transform: translate3d(0,0,0); } to { transform: translate3d(-42px,-42px,0); } }
+    .intro-canvas { opacity: .98; }
+    .intro-card {
+      max-width: 760px;
+      background: linear-gradient(145deg, rgba(255,255,255,.14), rgba(255,255,255,.07));
+      border: 1px solid rgba(255,255,255,.22);
+      box-shadow: 0 30px 110px rgba(255, 100, 160, .22), inset 0 1px 0 rgba(255,255,255,.28);
+      transform-style: preserve-3d;
+      transform: rotateX(8deg) rotateY(-8deg) translateZ(0);
+    }
+    .intro-card:hover { transform: rotateX(6deg) rotateY(6deg) translateZ(12px); }
+    .intro-badge { background: rgba(255,255,255,.12); border-color: rgba(255,255,255,.28); }
+    .intro-title { text-shadow: 0 0 30px rgba(255,143,171,.48); }
+    .intro-subtitle { max-width: 620px; margin-left:auto; margin-right:auto; }
+    .intro-3d-stage {
+      position: relative;
+      height: 180px;
+      margin-top: 24px;
+      border-radius: 34px;
+      background:
+        radial-gradient(circle at 20% 50%, rgba(255,143,171,.22), transparent 34%),
+        radial-gradient(circle at 80% 50%, rgba(255,214,165,.24), transparent 34%),
+        rgba(255,255,255,.08);
+      border: 1px solid rgba(255,255,255,.22);
+      overflow: hidden;
+      transform-style: preserve-3d;
+    }
+    .intro-3d-stage::before {
+      content: "";
+      position: absolute;
+      left: 10%; right: 10%; top: 50%; height: 2px;
+      background: linear-gradient(90deg, rgba(255,255,255,.05), rgba(255,143,171,.74), rgba(255,214,165,.74), rgba(255,255,255,.05));
+      box-shadow: 0 0 24px rgba(255,143,171,.55);
+      transform: translateY(-50%);
+    }
+    .intro-path-label {
+      position: absolute;
+      left: 24px;
+      bottom: 18px;
+      color: rgba(255,255,255,.70);
+      font-size: 13px;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+    }
+    .intro-dropzone {
+      position: absolute;
+      right: 24px;
+      top: 50%;
+      width: 108px;
+      height: 108px;
+      border-radius: 50%;
+      transform: translateY(-50%) rotateX(64deg) rotateZ(0deg);
+      border: 2px solid rgba(255,214,165,.72);
+      background: radial-gradient(circle, rgba(255,214,165,.28) 0%, rgba(255,143,171,.12) 48%, transparent 72%);
+      box-shadow: 0 0 32px rgba(255,214,165,.50), inset 0 0 28px rgba(255,255,255,.18);
+      animation: portalSpin 3.5s linear infinite;
+    }
+    .intro-dropzone::before, .intro-dropzone::after {
+      content: "";
+      position: absolute;
+      inset: 11px;
+      border-radius: 50%;
+      border: 1px dashed rgba(255,255,255,.62);
+    }
+    .intro-dropzone::after { inset: 25px; border-style: solid; opacity: .55; }
+    @keyframes portalSpin { to { transform: translateY(-50%) rotateX(64deg) rotateZ(360deg); } }
+    .intro-dropzone span {
+      position: absolute;
+      left: 50%; top: 50%;
+      transform: translate(-50%, -50%) rotateX(-64deg);
+      color: rgba(255,255,255,.84);
+      font-weight: 900;
+      font-size: 12px;
+      letter-spacing: .16em;
+    }
+    .intro-orb {
+      position: absolute;
+      left: 26px;
+      top: 50%;
+      width: 72px;
+      height: 72px;
+      border: 0;
+      border-radius: 50%;
+      transform: translate3d(0, -50%, 40px);
+      display: grid;
+      place-items: center;
+      color: #fff;
+      font-size: 30px;
+      cursor: grab;
+      touch-action: none;
+      background: radial-gradient(circle at 35% 28%, #fff 0 8%, #ffd1df 13%, #ff78a0 44%, #9f4cff 100%);
+      box-shadow: 0 0 34px rgba(255,143,171,.85), 0 0 80px rgba(161,76,255,.38);
+      z-index: 3;
+      transition: box-shadow .18s ease, scale .18s ease;
+    }
+    .intro-orb::before {
+      content: "";
+      position: absolute;
+      inset: -11px;
+      border-radius: inherit;
+      border: 1px solid rgba(255,255,255,.42);
+      animation: orbRing 2.1s ease-in-out infinite;
+    }
+    .intro-orb:active { cursor: grabbing; scale: 1.06; }
+    @keyframes orbRing { 0%,100%{ transform: scale(.86); opacity:.28;} 50%{ transform: scale(1.2); opacity:.8;} }
+    .intro-skip { margin-top: 18px; }
+    .intro-gate.hide .intro-card { transform: translate3d(0, 24px, 0) scale(.96) rotateX(10deg); opacity: 0; }
+
+    .section-particle-canvas {
+      position: fixed;
+      inset: 0;
+      z-index: 25;
+      pointer-events: none;
+      opacity: 0;
+      transition: opacity .18s ease;
+    }
+    .section-particle-canvas.show { opacity: 1; }
+
+    .nav a, .hero-actions a { position: relative; }
+    .nav a::after, .hero-actions a::after {
+      content: "";
+      position: absolute;
+      left: 50%; bottom: 5px;
+      width: 0; height: 2px;
+      border-radius: 999px;
+      background: linear-gradient(90deg, var(--primary), var(--accent));
+      transition: .25s ease;
+      transform: translateX(-50%);
+    }
+    .nav a:hover::after, .hero-actions a:hover::after { width: 62%; }
+
+    .music-dock {
+      left: 22px;
+      bottom: 22px;
+      width: 64px;
+      height: 64px;
+      background: radial-gradient(circle at 32% 24%, rgba(255,255,255,.98), rgba(255,240,246,.88));
+      box-shadow: 0 18px 60px rgba(255, 90, 145, .34), 0 0 0 1px rgba(255,143,171,.30);
+    }
+    .music-dock .dock-text { display: none !important; }
+    .music-dock button#dockPlay { width: 54px; height: 54px; font-size: 22px; }
+    .dock-lyric {
+      position: fixed;
+      left: 92px;
+      bottom: 26px;
+      min-width: 180px;
+      max-width: min(520px, calc(100vw - 125px));
+      padding: 12px 16px;
+      border-radius: 999px;
+      color: #5a3b43;
+      background: rgba(255,255,255,.84);
+      border: 1px solid rgba(255,143,171,.24);
+      box-shadow: 0 15px 45px rgba(255,143,171,.18);
+      backdrop-filter: blur(16px);
+      font-weight: 800;
+      font-size: 14px;
+      line-height: 1.35;
+      opacity: .96;
+      pointer-events: none;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .music-dock.playing + .floating-actions, .music-dock.playing { }
+    .music-dock.playing .dock-lyric { animation: lyricGlow 2.4s ease-in-out infinite; }
+    @keyframes lyricGlow { 0%,100%{ box-shadow: 0 15px 45px rgba(255,143,171,.18);} 50%{ box-shadow: 0 15px 60px rgba(255,143,171,.34);} }
+    body.night .dock-lyric { color: var(--text); background: rgba(45,32,39,.82); border-color: rgba(255,255,255,.12); }
+
+    @media (max-width: 640px) {
+      .intro-card { padding: 24px 16px; transform: none; }
+      .intro-3d-stage { height: 150px; border-radius: 26px; }
+      .intro-orb { width: 58px; height: 58px; font-size: 24px; }
+      .intro-dropzone { width: 86px; height: 86px; right: 16px; }
+      .intro-path-label { font-size: 11px; left: 18px; }
+      .dock-lyric {
+        left: 80px;
+        bottom: 19px;
+        max-width: calc(100vw - 98px);
+        min-width: 0;
+        padding: 10px 13px;
+        font-size: 13px;
+      }
+      .music-dock { left: 12px; bottom: 12px; }
+    }
+
   </style>
 </head>
 <body>
   <div class="scroll-progress" id="scrollProgress" aria-hidden="true"></div>
+  <canvas class="section-particle-canvas" id="sectionParticleCanvas" aria-hidden="true"></canvas>
 
   <canvas class="romantic-bg-canvas" id="romanticBgCanvas" aria-hidden="true"></canvas>
-  <div class="intro-gate" id="introGate" role="dialog" aria-modal="true" aria-label="网站开场动画">
+  <div class="intro-gate" id="introGate" role="dialog" aria-modal="true" aria-label="3D 粒子开场动画">
     <canvas class="intro-canvas" id="introCanvas" aria-hidden="true"></canvas>
     <div class="intro-card">
-      <div class="intro-badge">✦ Love Memory ✦</div>
+      <div class="intro-badge">✦ 3D Love Particles ✦</div>
       <h1 class="intro-title">欢迎来到<br><span>我们的恋爱纪念馆</span></h1>
-      <p class="intro-subtitle">先让星光和爱心粒子亮起来。拖动下面的小爱心到终点，进入只属于我们的页面。</p>
-      <div class="intro-slider" id="introSlider">
-        <div class="intro-fill" id="introFill"></div>
-        <div class="intro-track-text" id="introTrackText">拖动爱心进入主页面</div>
-        <button class="intro-knob" id="introKnob" type="button" aria-label="拖动进入主页面">❤</button>
+      <p class="intro-subtitle">星光会先在三维空间里聚成一颗心。把发光爱心星球拖放到右侧星门，粒子散开后进入主页面。</p>
+      <div class="intro-3d-stage" id="introStage">
+        <div class="intro-path-label">Drag the love orb into the portal</div>
+        <button class="intro-orb" id="introKnob" type="button" aria-label="拖动爱心星球进入主页面">❤</button>
+        <div class="intro-dropzone" id="introDropzone"><span>ENTER</span></div>
       </div>
       <button class="intro-skip" id="introSkip" type="button">直接进入</button>
     </div>
@@ -1300,6 +1508,7 @@
   <div class="music-dock" id="musicDock" aria-label="背景音乐：点击播放或暂停" title="点击播放 / 暂停音乐">
     <button id="dockPlay" type="button" aria-label="播放或暂停音乐">▶</button>
     <div class="dock-text"><strong id="dockTitle">恶作剧 - 林依晨</strong><span id="dockStatus">点击播放 / 暂停</span></div>
+    <div class="dock-lyric" id="dockLyric">点音乐图标播放《恶作剧》</div>
     <button id="dockNext" type="button" aria-label="下一首">♪</button>
   </div>
   <div class="floating-actions" aria-label="快捷操作">
@@ -2004,9 +2213,8 @@ grant execute on function public.save_couple_site(text, jsonb, text) to anon, au
     }
 
     function getMusicVolume() {
-      const saved = Number(localStorage.getItem('couple-memory-site-volume'));
-      if (Number.isFinite(saved)) return Math.min(1, Math.max(0, saved));
-      return 0.55;
+      // 不再用网页内部固定音量压低声音，交给手机/电脑系统音量自然控制。
+      return 1;
     }
 
     function setMusicTip(message) {
@@ -2060,10 +2268,13 @@ grant execute on function public.save_couple_site(text, jsonb, text) to anon, au
       const panel = document.getElementById('lyricsPanel');
       if (!panel) return;
       activeLyricIndex = -1;
+      const dockLyric = document.getElementById('dockLyric');
       if (!lyricLines.length) {
         panel.innerHTML = `<div class="lyric-empty">${escapeHTML(message)}</div>`;
+        if (dockLyric) dockLyric.textContent = message || '暂无歌词';
         return;
       }
+      if (dockLyric) dockLyric.textContent = '歌词已加载，点音乐图标播放';
       panel.innerHTML = lyricLines.map((line, index) => `
         <div class="lyric-line" data-lyric-index="${index}">${escapeHTML(line.text)}</div>
       `).join('');
@@ -2122,6 +2333,8 @@ grant execute on function public.save_couple_site(text, jsonb, text) to anon, au
         current.classList.add('active');
         current.scrollIntoView({ block: 'center', behavior: 'smooth' });
       }
+      const dockLyric = document.getElementById('dockLyric');
+      if (dockLyric && lyricLines[index]) dockLyric.textContent = lyricLines[index].text;
       activeLyricIndex = index;
     }
 
@@ -2158,7 +2371,7 @@ grant execute on function public.save_couple_site(text, jsonb, text) to anon, au
       const volume = getMusicVolume();
       audio.volume = volume;
       const volumeInput = document.getElementById('musicVolume');
-      if (volumeInput && document.activeElement !== volumeInput) volumeInput.value = String(Math.round(volume * 100));
+      if (volumeInput && document.activeElement !== volumeInput) volumeInput.value = '100';
       const autoplay = document.getElementById('musicAutoplay');
       if (autoplay) autoplay.checked = data.music.autoplay;
       const neteaseWrap = document.getElementById('neteaseWrap');
@@ -2668,9 +2881,8 @@ grant execute on function public.save_couple_site(text, jsonb, text) to anon, au
     document.getElementById('musicSelect').addEventListener('change', event => changeTrack(Number(event.target.value), true));
     document.getElementById('musicVolume').addEventListener('input', event => {
       const volume = Math.min(1, Math.max(0, Number(event.target.value) / 100));
-      localStorage.setItem('couple-memory-site-volume', String(volume));
       const audio = document.getElementById('loveAudio');
-      if (audio) audio.volume = volume;
+      if (audio) audio.volume = 1;
     });
     document.getElementById('loveAudio').addEventListener('play', updateMusicButtons);
     document.getElementById('loveAudio').addEventListener('pause', updateMusicButtons);
@@ -2763,124 +2975,184 @@ grant execute on function public.save_couple_site(text, jsonb, text) to anon, au
     function initRomanticIntro() {
       const gate = document.getElementById('introGate');
       const canvas = document.getElementById('introCanvas');
-      const slider = document.getElementById('introSlider');
-      const knob = document.getElementById('introKnob');
-      const fill = document.getElementById('introFill');
+      const stage = document.getElementById('introStage');
+      const orb = document.getElementById('introKnob');
+      const portal = document.getElementById('introDropzone');
       const skip = document.getElementById('introSkip');
-      if (!gate || !canvas || !slider || !knob || !fill) return;
+      if (!gate || !canvas || !stage || !orb || !portal) return;
 
       const ctx = canvas.getContext('2d');
-      let width = 0;
-      let height = 0;
+      let width = 0, height = 0, ratio = 1;
       let particles = [];
       let rafId = 0;
+      let t = 0;
+      let exploding = false;
+      let dragging = false;
+      let pointer = { x: 0, y: 0 };
+      let orbLocal = { x: 0, y: 0 };
+      let dragOffset = { x: 0, y: 0 };
       const reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
+      function heartPoint(i, total) {
+        const a = (i / total) * Math.PI * 2;
+        const x = 16 * Math.pow(Math.sin(a), 3);
+        const y = -(13 * Math.cos(a) - 5 * Math.cos(2 * a) - 2 * Math.cos(3 * a) - Math.cos(4 * a));
+        return { x: x * 15, y: y * 15 };
+      }
+
       function resize() {
-        const ratio = Math.min(window.devicePixelRatio || 1, 2);
+        ratio = Math.min(window.devicePixelRatio || 1, 2);
         width = canvas.clientWidth || window.innerWidth;
         height = canvas.clientHeight || window.innerHeight;
         canvas.width = Math.floor(width * ratio);
         canvas.height = Math.floor(height * ratio);
         ctx.setTransform(ratio, 0, 0, ratio, 0, 0);
-        const total = reduceMotion ? 34 : Math.min(130, Math.floor(width * height / 10500));
-        particles = Array.from({ length: total }, () => ({
-          x: Math.random() * width,
-          y: Math.random() * height,
-          r: 1.1 + Math.random() * 3.6,
-          vx: (Math.random() - .5) * .38,
-          vy: -(.16 + Math.random() * .45),
-          a: .32 + Math.random() * .62,
-          hue: Math.random() < .62 ? 338 : (38 + Math.random() * 28),
-          kind: Math.random() < .28 ? 'heart' : 'dot',
-          spin: Math.random() * Math.PI * 2
-        }));
+        const total = reduceMotion ? 120 : Math.min(720, Math.floor(width * height / 1600));
+        particles = Array.from({ length: total }, (_, i) => {
+          const hp = heartPoint(i, total);
+          const layer = (Math.random() - .5) * 620;
+          return {
+            x: (Math.random() - .5) * width * 1.4,
+            y: (Math.random() - .5) * height * 1.2,
+            z: (Math.random() - .5) * 900,
+            tx: hp.x + (Math.random() - .5) * 22,
+            ty: hp.y + (Math.random() - .5) * 22,
+            tz: layer,
+            vx: 0, vy: 0, vz: 0,
+            r: .8 + Math.random() * 2.4,
+            hue: Math.random() < .72 ? 338 + Math.random() * 16 : 36 + Math.random() * 24,
+            sparkle: Math.random() * Math.PI * 2
+          };
+        });
+        resetOrb(false);
       }
 
-      function drawHeart(ctx, x, y, size, alpha, spin) {
-        ctx.save();
-        ctx.translate(x, y);
-        ctx.rotate(Math.sin(spin) * .24);
-        ctx.scale(size / 18, size / 18);
-        ctx.beginPath();
-        ctx.moveTo(0, 5);
-        ctx.bezierCurveTo(-12, -5, -10, -17, 0, -10);
-        ctx.bezierCurveTo(10, -17, 12, -5, 0, 5);
-        ctx.closePath();
-        ctx.fillStyle = `rgba(255, 190, 210, ${alpha})`;
-        ctx.shadowColor = 'rgba(255, 143, 171, .75)';
-        ctx.shadowBlur = 14;
-        ctx.fill();
-        ctx.restore();
+      function project(x, y, z, spin) {
+        const cx = width / 2;
+        const cy = height / 2;
+        const cos = Math.cos(spin), sin = Math.sin(spin);
+        const rx = x * cos - z * sin;
+        const rz = x * sin + z * cos;
+        const depth = 880;
+        const scale = depth / (depth + rz);
+        return { x: cx + rx * scale, y: cy + y * scale, scale, z: rz };
       }
 
-      function tick() {
+      function draw() {
+        t += .008;
         ctx.clearRect(0, 0, width, height);
-        const gradient = ctx.createRadialGradient(width * .5, height * .45, 10, width * .5, height * .45, Math.max(width, height) * .7);
-        gradient.addColorStop(0, 'rgba(255,255,255,.12)');
-        gradient.addColorStop(1, 'rgba(255,255,255,0)');
-        ctx.fillStyle = gradient;
+        const bg = ctx.createRadialGradient(width * .5, height * .48, 20, width * .5, height * .48, Math.max(width, height) * .72);
+        bg.addColorStop(0, 'rgba(255,143,171,.14)');
+        bg.addColorStop(.46, 'rgba(145,89,255,.08)');
+        bg.addColorStop(1, 'rgba(0,0,0,0)');
+        ctx.fillStyle = bg;
         ctx.fillRect(0, 0, width, height);
 
-        particles.forEach(p => {
-          p.x += p.vx;
-          p.y += p.vy;
-          p.spin += .024;
-          if (p.y < -28) { p.y = height + 28; p.x = Math.random() * width; }
-          if (p.x < -30) p.x = width + 30;
-          if (p.x > width + 30) p.x = -30;
-          if (p.kind === 'heart') drawHeart(ctx, p.x, p.y, p.r * 8, p.a, p.spin);
-          else {
-            ctx.beginPath();
-            ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
-            ctx.fillStyle = `hsla(${p.hue}, 95%, 78%, ${p.a})`;
-            ctx.shadowColor = `hsla(${p.hue}, 95%, 78%, .9)`;
-            ctx.shadowBlur = 12;
-            ctx.fill();
-            ctx.shadowBlur = 0;
+        const spin = t + (pointer.x - width / 2) / Math.max(width, 1) * .45;
+        particles.forEach((p) => {
+          if (exploding) {
+            p.x += p.vx; p.y += p.vy; p.z += p.vz;
+            p.vx *= 1.012; p.vy *= 1.012; p.vz *= 1.006;
+          } else {
+            const breathe = 1 + Math.sin(t * 2 + p.sparkle) * .045;
+            const targetX = p.tx * breathe;
+            const targetY = p.ty * breathe;
+            const targetZ = p.tz;
+            p.x += (targetX - p.x) * .025;
+            p.y += (targetY - p.y) * .025;
+            p.z += (targetZ - p.z) * .025;
+            if (dragging) {
+              const dx = (pointer.x - width / 2) - p.x;
+              const dy = (pointer.y - height / 2) - p.y;
+              const d = Math.hypot(dx, dy) || 1;
+              if (d < 260) {
+                p.x += dx / d * (1 - d / 260) * 2.6;
+                p.y += dy / d * (1 - d / 260) * 2.6;
+              }
+            }
           }
+          const q = project(p.x, p.y, p.z, spin);
+          if (q.scale <= .12) return;
+          const alpha = Math.max(.12, Math.min(.95, q.scale * .88));
+          const radius = p.r * q.scale * (1 + Math.sin(t * 5 + p.sparkle) * .18);
+          ctx.beginPath();
+          ctx.arc(q.x, q.y, radius, 0, Math.PI * 2);
+          ctx.fillStyle = `hsla(${p.hue}, 96%, ${72 + q.scale * 12}%, ${alpha})`;
+          ctx.shadowColor = `hsla(${p.hue}, 96%, 78%, .86)`;
+          ctx.shadowBlur = 16 * q.scale;
+          ctx.fill();
+          ctx.shadowBlur = 0;
         });
-        rafId = requestAnimationFrame(tick);
+        rafId = requestAnimationFrame(draw);
       }
 
-      let dragging = false;
-      let progress = 0;
-      function setProgress(value) {
-        progress = Math.max(0, Math.min(1, value));
-        const max = slider.clientWidth - knob.clientWidth - 16;
-        knob.style.transform = `translateX(${progress * max}px)`;
-        fill.style.width = `${progress * 100}%`;
-        if (progress > .78) enterSite();
+      function resetOrb(animate = true) {
+        const rect = stage.getBoundingClientRect();
+        orbLocal = { x: 26, y: rect.height / 2 - orb.offsetHeight / 2 };
+        orb.style.transition = animate ? 'left .32s ease, top .32s ease, transform .22s ease' : 'none';
+        orb.style.left = orbLocal.x + 'px';
+        orb.style.top = orbLocal.y + 'px';
+        orb.style.transform = 'translate3d(0,0,40px)';
+        setTimeout(() => { orb.style.transition = ''; }, 340);
       }
-      function pointerProgress(event) {
-        const rect = slider.getBoundingClientRect();
-        return (event.clientX - rect.left - knob.clientWidth / 2) / (rect.width - knob.clientWidth - 16);
+
+      function setOrbFromEvent(event) {
+        const rect = stage.getBoundingClientRect();
+        orbLocal.x = event.clientX - rect.left - dragOffset.x;
+        orbLocal.y = event.clientY - rect.top - dragOffset.y;
+        orbLocal.x = Math.max(8, Math.min(rect.width - orb.offsetWidth - 8, orbLocal.x));
+        orbLocal.y = Math.max(8, Math.min(rect.height - orb.offsetHeight - 8, orbLocal.y));
+        orb.style.left = orbLocal.x + 'px';
+        orb.style.top = orbLocal.y + 'px';
+        pointer = { x: event.clientX, y: event.clientY };
       }
-      function enterSite() {
+
+      function isOrbInPortal() {
+        const o = orb.getBoundingClientRect();
+        const p = portal.getBoundingClientRect();
+        const ox = o.left + o.width / 2, oy = o.top + o.height / 2;
+        const px = p.left + p.width / 2, py = p.top + p.height / 2;
+        return Math.hypot(ox - px, oy - py) < Math.min(p.width, p.height) * .46;
+      }
+
+      function explodeAndEnter() {
         if (gate.classList.contains('hide')) return;
-        gate.classList.add('hide');
-        cancelAnimationFrame(rafId);
-        setTimeout(() => gate.remove(), 850);
-        tryPlayMusic(true);
-        setTimeout(() => popHeart(window.innerWidth / 2, window.innerHeight / 2), 120);
+        exploding = true;
+        particles.forEach(p => {
+          const len = Math.hypot(p.x, p.y, p.z) || 1;
+          p.vx = p.x / len * (7 + Math.random() * 12);
+          p.vy = p.y / len * (7 + Math.random() * 12);
+          p.vz = p.z / len * (7 + Math.random() * 12);
+        });
+        portal.style.boxShadow = '0 0 80px rgba(255,214,165,.95), inset 0 0 48px rgba(255,255,255,.28)';
+        setTimeout(() => {
+          gate.classList.add('hide');
+          tryPlayMusic(true);
+          popHeart(window.innerWidth / 2, window.innerHeight / 2);
+          setTimeout(() => { cancelAnimationFrame(rafId); gate.remove(); }, 880);
+        }, 520);
       }
 
-      knob.addEventListener('pointerdown', event => {
+      orb.addEventListener('pointerdown', event => {
         dragging = true;
-        knob.setPointerCapture(event.pointerId);
-        setProgress(pointerProgress(event));
+        const rect = orb.getBoundingClientRect();
+        dragOffset = { x: event.clientX - rect.left, y: event.clientY - rect.top };
+        pointer = { x: event.clientX, y: event.clientY };
+        orb.setPointerCapture(event.pointerId);
+        orb.style.transform = 'translate3d(0,0,70px) scale(1.08)';
       });
-      knob.addEventListener('pointermove', event => { if (dragging) setProgress(pointerProgress(event)); });
-      knob.addEventListener('pointerup', event => {
+      orb.addEventListener('pointermove', event => { if (dragging) setOrbFromEvent(event); });
+      orb.addEventListener('pointerup', event => {
         dragging = false;
-        try { knob.releasePointerCapture(event.pointerId); } catch {}
-        if (progress <= .78) setProgress(0);
+        try { orb.releasePointerCapture(event.pointerId); } catch {}
+        orb.style.transform = 'translate3d(0,0,40px)';
+        if (isOrbInPortal()) explodeAndEnter();
+        else resetOrb(true);
       });
-      slider.addEventListener('pointerdown', event => setProgress(pointerProgress(event)));
-      if (skip) skip.addEventListener('click', enterSite);
+      if (skip) skip.addEventListener('click', explodeAndEnter);
       window.addEventListener('resize', resize, { passive: true });
       resize();
-      tick();
+      draw();
     }
 
     function initAmbientParticles() {
@@ -2939,7 +3211,90 @@ grant execute on function public.save_couple_site(text, jsonb, text) to anon, au
     }
 
 
+
+    function initSectionParticleTransitions() {
+      const canvas = document.getElementById('sectionParticleCanvas');
+      if (!canvas) return;
+      const ctx = canvas.getContext('2d');
+      let width = 0, height = 0, ratio = 1, particles = [], raf = 0, active = false;
+      function resize() {
+        ratio = Math.min(window.devicePixelRatio || 1, 2);
+        width = window.innerWidth;
+        height = window.innerHeight;
+        canvas.width = Math.floor(width * ratio);
+        canvas.height = Math.floor(height * ratio);
+        ctx.setTransform(ratio, 0, 0, ratio, 0, 0);
+      }
+      function makeParticles(originX, originY) {
+        resize();
+        const total = Math.min(240, Math.max(90, Math.floor(width * height / 6500)));
+        particles = Array.from({ length: total }, (_, i) => {
+          const a = (i / total) * Math.PI * 2 + Math.random() * .3;
+          const speed = 2.4 + Math.random() * 9.5;
+          return {
+            x: originX, y: originY,
+            vx: Math.cos(a) * speed,
+            vy: Math.sin(a) * speed,
+            z: Math.random() * 340,
+            vz: -2 + Math.random() * 4,
+            r: 1 + Math.random() * 4,
+            life: 1,
+            decay: .014 + Math.random() * .012,
+            hue: Math.random() < .65 ? 338 + Math.random() * 18 : 36 + Math.random() * 28
+          };
+        });
+      }
+      function draw() {
+        ctx.clearRect(0, 0, width, height);
+        particles.forEach(p => {
+          p.x += p.vx; p.y += p.vy; p.z += p.vz;
+          p.vx *= .982; p.vy *= .982; p.vz *= .982;
+          p.life -= p.decay;
+          const scale = 720 / (720 + p.z);
+          ctx.beginPath();
+          ctx.arc(p.x, p.y, Math.max(.4, p.r * scale), 0, Math.PI * 2);
+          ctx.fillStyle = `hsla(${p.hue}, 95%, 76%, ${Math.max(0, p.life)})`;
+          ctx.shadowColor = `hsla(${p.hue}, 95%, 76%, .9)`;
+          ctx.shadowBlur = 18 * Math.max(0, p.life);
+          ctx.fill();
+          ctx.shadowBlur = 0;
+        });
+        particles = particles.filter(p => p.life > 0);
+        if (particles.length) raf = requestAnimationFrame(draw);
+        else {
+          active = false;
+          canvas.classList.remove('show');
+        }
+      }
+      function transitionTo(hash, x = width / 2, y = height / 2) {
+        const target = document.querySelector(hash);
+        if (!target || active) return false;
+        active = true;
+        canvas.classList.add('show');
+        makeParticles(x, y);
+        cancelAnimationFrame(raf);
+        draw();
+        setTimeout(() => target.scrollIntoView({ behavior: 'smooth', block: 'start' }), 120);
+        history.replaceState(null, '', hash);
+        return true;
+      }
+      document.querySelectorAll('a[href^="#"]').forEach(link => {
+        link.addEventListener('click', event => {
+          const hash = link.getAttribute('href');
+          if (!hash || hash === '#') return;
+          const target = document.querySelector(hash);
+          if (!target) return;
+          event.preventDefault();
+          const rect = link.getBoundingClientRect();
+          transitionTo(hash, rect.left + rect.width / 2, rect.top + rect.height / 2);
+        });
+      });
+      window.addEventListener('resize', resize, { passive: true });
+      resize();
+    }
+
     initAmbientParticles();
+    initSectionParticleTransitions();
     initRomanticIntro();
 
     initCloud();
