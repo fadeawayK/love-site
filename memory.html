@@ -1988,6 +1988,276 @@
       }
     }
 
+  
+
+    /* ==== enhanced modules: countdown / glowing trajectory / promises ==== */
+    .countdown-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 18px;
+    }
+    .countdown-card {
+      position: relative;
+      min-height: 188px;
+      overflow: hidden;
+      padding: 24px;
+      border-radius: 30px;
+      background: linear-gradient(180deg, rgba(255,255,255,.88), rgba(255,248,250,.72));
+    }
+    .countdown-card::before {
+      content: "";
+      position: absolute;
+      inset: auto -24px -56px auto;
+      width: 130px;
+      height: 130px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(255,143,171,.28), transparent 70%);
+    }
+    .countdown-card h3 {
+      font-size: 18px;
+      color: var(--muted);
+      margin-bottom: 14px;
+      font-weight: 700;
+    }
+    .countdown-card .count-big {
+      font-size: 46px;
+      line-height: 1;
+      font-weight: 900;
+      color: var(--primary-dark);
+      margin-bottom: 10px;
+      letter-spacing: -1px;
+    }
+    .countdown-card .count-big small {
+      font-size: 22px;
+      margin-left: 4px;
+      font-weight: 700;
+    }
+    .countdown-card p {
+      color: var(--muted);
+      line-height: 1.75;
+    }
+    .milestone-countdown {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 16px;
+      margin-top: 18px;
+    }
+    .milestone-countdown .milestone-item {
+      background: rgba(255,255,255,.58);
+      border: 1px solid rgba(255,255,255,.7);
+      box-shadow: 0 12px 30px rgba(255,143,171,.08);
+    }
+
+    .trajectory-timeline {
+      position: relative;
+      display: grid;
+      gap: 26px;
+      padding: 18px 0 6px;
+    }
+    .trajectory-timeline::before {
+      content: "";
+      position: absolute;
+      left: 50%;
+      top: 0;
+      bottom: 0;
+      width: 6px;
+      transform: translateX(-50%);
+      border-radius: 999px;
+      background: linear-gradient(180deg, rgba(255,143,171,.18), rgba(255,143,171,.95) 18%, rgba(255,214,165,.9) 55%, rgba(255,143,171,.22));
+      box-shadow: 0 0 26px rgba(255,143,171,.42);
+      opacity: .92;
+    }
+    .trajectory-event {
+      position: relative;
+      display: grid;
+      grid-template-columns: 1fr 84px 1fr;
+      align-items: center;
+      min-height: 165px;
+    }
+    .trajectory-side { width: 100%; }
+    .trajectory-event.left .trajectory-side { grid-column: 1; padding-right: 18px; }
+    .trajectory-event.right .trajectory-side { grid-column: 3; padding-left: 18px; }
+    .trajectory-node {
+      grid-column: 2;
+      justify-self: center;
+      position: relative;
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      background: radial-gradient(circle at 35% 35%, #fff 0%, #ffd8e3 28%, #ff8fab 60%, #ff7096 100%);
+      box-shadow: 0 0 0 10px rgba(255,143,171,.16), 0 0 32px rgba(255,143,171,.48);
+      animation: pulseDot 2.8s ease-in-out infinite;
+    }
+    .trajectory-node::before,
+    .trajectory-node::after {
+      content: "";
+      position: absolute;
+      border-radius: 50%;
+      inset: -8px;
+      border: 1px solid rgba(255,214,165,.56);
+    }
+    .trajectory-node::after {
+      inset: -15px;
+      border-color: rgba(255,143,171,.28);
+    }
+    @keyframes pulseDot {
+      0%, 100% { transform: scale(1); box-shadow: 0 0 0 10px rgba(255,143,171,.16), 0 0 30px rgba(255,143,171,.46); }
+      50% { transform: scale(1.08); box-shadow: 0 0 0 14px rgba(255,143,171,.12), 0 0 42px rgba(255,143,171,.56); }
+    }
+    .trajectory-date {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 14px;
+      margin-bottom: 12px;
+      border-radius: 999px;
+      background: rgba(255,255,255,.78);
+      border: 1px solid rgba(255,143,171,.2);
+      color: var(--primary-dark);
+      font-weight: 800;
+      box-shadow: 0 10px 24px rgba(255,143,171,.12);
+    }
+    .trajectory-card {
+      position: relative;
+      overflow: hidden;
+      border-radius: 28px;
+      padding: 24px 24px 22px;
+      min-height: 136px;
+      background: linear-gradient(180deg, rgba(255,255,255,.84), rgba(255,250,251,.74));
+    }
+    .trajectory-card::before {
+      content: "";
+      position: absolute;
+      inset: auto auto -46px -32px;
+      width: 132px;
+      height: 132px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(255,214,165,.32), transparent 72%);
+    }
+    .trajectory-order {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 54px;
+      height: 30px;
+      padding: 0 10px;
+      border-radius: 999px;
+      background: linear-gradient(135deg, rgba(255,143,171,.18), rgba(255,214,165,.32));
+      color: var(--primary-dark);
+      font-size: 13px;
+      font-weight: 900;
+      margin-bottom: 10px;
+    }
+    .trajectory-card h3 { font-size: 24px; margin-bottom: 10px; }
+    .trajectory-card p { color: var(--muted); line-height: 1.8; }
+
+    .agreement-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 18px;
+    }
+    .promise-card {
+      position: relative;
+      overflow: hidden;
+      min-height: 195px;
+      padding: 24px;
+      border-radius: 28px;
+      background: linear-gradient(180deg, rgba(255,255,255,.86), rgba(255,246,248,.72));
+    }
+    .promise-card::after {
+      content: "❤";
+      position: absolute;
+      right: 18px;
+      bottom: -20px;
+      font-size: 88px;
+      color: rgba(255,143,171,.11);
+      transform: rotate(-12deg);
+    }
+    .promise-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      margin-bottom: 16px;
+      flex-wrap: wrap;
+    }
+    .promise-tag,
+    .promise-state {
+      display: inline-flex;
+      align-items: center;
+      border-radius: 999px;
+      padding: 8px 12px;
+      font-size: 13px;
+      font-weight: 800;
+    }
+    .promise-tag {
+      background: rgba(255,143,171,.12);
+      color: var(--primary-dark);
+    }
+    .promise-state {
+      background: rgba(255,255,255,.82);
+      border: 1px solid rgba(255,143,171,.14);
+      color: var(--muted);
+    }
+    .promise-card strong {
+      display: block;
+      font-size: 23px;
+      margin-bottom: 10px;
+      line-height: 1.35;
+    }
+    .promise-card p {
+      color: var(--muted);
+      line-height: 1.8;
+      margin-bottom: 14px;
+    }
+    .promise-card.done {
+      opacity: .82;
+      background: linear-gradient(180deg, rgba(246,255,249,.9), rgba(245,255,250,.74));
+    }
+    .promise-card.done .promise-state {
+      color: #4c9b6c;
+      border-color: rgba(76,155,108,.15);
+      background: rgba(76,155,108,.08);
+    }
+    .promise-card.done strong {
+      text-decoration: line-through;
+      text-decoration-thickness: 1.5px;
+    }
+
+    @media (max-width: 980px) {
+      .countdown-grid,
+      .milestone-countdown,
+      .agreement-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .trajectory-event { grid-template-columns: 1fr 60px 1fr; }
+    }
+    @media (max-width: 700px) {
+      .countdown-grid,
+      .milestone-countdown,
+      .agreement-grid { grid-template-columns: 1fr; }
+      .trajectory-timeline::before {
+        left: 24px;
+        transform: none;
+      }
+      .trajectory-event {
+        grid-template-columns: 48px 1fr;
+        min-height: unset;
+      }
+      .trajectory-node {
+        grid-column: 1;
+        justify-self: start;
+        width: 22px;
+        height: 22px;
+        margin-left: 13px;
+      }
+      .trajectory-side,
+      .trajectory-event.left .trajectory-side,
+      .trajectory-event.right .trajectory-side {
+        grid-column: 2;
+        padding: 0 0 0 8px;
+      }
+      .trajectory-card h3 { font-size: 21px; }
+    }
+
   </style>
 </head>
 <body>
@@ -2035,11 +2305,10 @@
   <header class="shell nav">
     <a class="brand" href="#home" aria-label="回到首页"><span class="heart">❤</span><span id="siteNameNav">我们的恋爱纪念馆</span></a>
     <nav class="links" aria-label="主导航">
-      <a href="#days">恋爱天数</a>
-      <a href="#timeline">时间轴</a>
-      <a href="#diary">情侣日记</a>
-      <a href="#wishes">愿望清单</a>
-      <a href="#note">今日小纸条</a>
+      <a href="#days">纪念日</a>
+      <a href="#timeline">时间轨迹</a>
+      <a href="#wishes">我们的约定</a>
+      <a href="#diary">恋爱日记</a>
       <button class="ghost-btn" id="toggleEditor" type="button">登录编辑</button>
     </nav>
   </header>
@@ -2049,54 +2318,42 @@
       <div>
         <div class="kicker">💌 慢慢记录 · 双方同步编辑</div>
         <h1><span id="heroNames">我们</span>的<br><span class="gradient-text">恋爱纪念馆</span></h1>
-        <p class="lead" id="heroText">这里收藏我们的日常、纪念日和那些很小却很珍贵的瞬间。以后每一次想起，都可以回到这里看看。</p>
+        <p class="lead" id="heroText">这里收藏我们的纪念日倒计时、恋爱时间轨迹、共同约定，以及那些很小却很珍贵的瞬间。以后每一次想起，都可以回到这里看看。</p>
         <div class="hero-actions">
-          <a class="btn" href="#timeline">查看我们的故事</a>
-          <a class="btn secondary" href="#diary">看看最近日记</a>
+          <a class="btn" href="#timeline">查看时间轨迹</a>
+          <a class="btn secondary" href="#wishes">翻开我们的约定</a>
           <button class="btn secondary" id="shareSite" type="button">复制网站链接</button>
           <span class="status-pill"><span class="dot locked" id="cloudDot"></span><span id="cloudText">本地预览模式</span></span>
         </div>
         <div class="stats" aria-label="恋爱统计">
           <div class="stat"><b id="statDays">0</b><small>已经一起走过的天数</small></div>
-          <div class="stat"><b id="statEvents">0</b><small>被记录的重要瞬间</small></div>
-          <div class="stat"><b id="statDiaries">0</b><small>写下的恋爱日记</small></div>
+          <div class="stat"><b id="statEventsHero">0</b><small>发光时间轨迹里的节点</small></div>
+          <div class="stat"><b id="statPromisesHero">0</b><small>一起守护的约定</small></div>
         </div>
       </div>
       <div class="hero-card" id="heroCard">
         <div class="photo-note"><strong id="heroCardTitle">双人编辑版已经准备好啦</strong><span id="heroCardDesc">普通打开只能看，输入共同密码后才能编辑。接入 Supabase 后，双方打开同一个网址即可同步内容。</span></div>
       </div>
     </section>
-
     <section class="shell" id="days">
-      <div class="section-head"><div><h2>恋爱天数与纪念日</h2><p>把重要日期放在这里，每次打开网站都能看到你们一起走过了多久。</p></div></div>
-      <div class="grid cards-3">
-        <article class="card count-card"><h3>已经在一起</h3><div class="big"><span id="loveDays">0</span> 天</div><p id="startDateText">从某一天开始</p></article>
-        <article class="card count-card"><h3>距离下一个周年</h3><div class="big"><span id="anniversaryLeft">0</span> 天</div><p>每一年都值得认真庆祝。</p></article>
-        <article class="card count-card"><h3>今天的小提醒</h3><div class="big">❤</div><p id="todayReminder">记得把今天的小开心写下来。</p></article>
+      <div class="section-head"><div><h2>纪念日倒计时</h2><p>把重要的日子做成长期可见的小倒计时：今天是第几天、离周年还有多久、下一个整百天什么时候到来，都能一眼看到。</p></div></div>
+      <div class="countdown-grid">
+        <article class="card countdown-card"><h3>已经在一起</h3><div class="count-big"><span id="loveDays">0</span><small>天</small></div><p id="startDateText">从某一天开始</p></article>
+        <article class="card countdown-card"><h3>距离下一次周年</h3><div class="count-big"><span id="anniversaryLeft">0</span><small>天</small></div><p>每一年都值得认真庆祝，也值得认真期待。</p></article>
+        <article class="card countdown-card"><h3>距离下一个整百天</h3><div class="count-big"><span id="nextHundredDay">0</span><small>天</small></div><p id="nextHundredText">距离第 100 天纪念日</p></article>
+        <article class="card countdown-card"><h3>距离特别节点</h3><div class="count-big"><span id="nextLoveDay">0</span><small>天</small></div><p>下一次 520 / 1314 / 特别数字纪念点。</p></article>
       </div>
-      <div class="card milestone-strip" aria-label="恋爱里程碑">
-        <div class="milestone-item"><b id="nextHundredDay">0</b><span id="nextHundredText">距离下一个整百天</span></div>
-        <div class="milestone-item"><b id="nextLoveDay">0</b><span>距离下一个 520/1314 纪念节点</span></div>
+      <div class="milestone-countdown" aria-label="纪念日补充信息">
+        <div class="milestone-item"><b id="statEvents">0</b><span>已经写进时间轨迹的重要节点</span></div>
+        <div class="milestone-item"><b id="statDiaries">0</b><span>一起许下并守护的约定</span></div>
         <div class="milestone-item"><b id="lastUpdated">刚刚</b><span>最近一次内容更新</span></div>
       </div>
     </section>
-
-    <section class="shell" id="note">
-      <div class="section-head"><div><h2>今日小纸条</h2><p>每次打开网站，都给彼此一个小小的情绪回应。不是很复杂，但很有“只属于我们”的感觉。</p></div></div>
-      <div class="grid sweet-grid">
-        <article class="card sweet-note"><h3 id="noteTitle">今天也要好好相爱</h3><p id="noteText">把今天的小开心存进这里，等以后回头看的时候，会发现普通日子也闪闪发光。</p></article>
-        <div class="mini-list">
-          <article class="mini-love"><strong>今日关键词</strong><span id="todayKeyword">陪伴</span></article>
-          <article class="mini-love"><strong>给未来的我们</strong><span>别急，慢慢来，把生活过成两个人都喜欢的样子。</span></article>
-          <article class="mini-love"><strong>小互动</strong><span>点击右下角爱心，会掉落一点点粉色小心动。</span></article>
-        </div>
-      </div>
-    </section>
-
     <section class="shell" id="timeline">
-      <div class="section-head"><div><h2>我们的时间轴</h2><p>记录认识、表白、约会、旅行、争吵后的和好，以及所有值得被保存的瞬间。</p></div></div>
-      <div class="timeline" id="timelineList"></div>
+      <div class="section-head"><div><h2>恋爱时间轨迹</h2><p>用一条发光的时间轨迹，把认识、约会、旅行、争吵后的和好，以及所有值得被保存的瞬间串起来。</p></div></div>
+      <div class="trajectory-timeline" id="timelineList"></div>
     </section>
+
 
     <section class="shell" id="album" style="display:none !important;" aria-hidden="true">
       <div class="section-head">
@@ -2136,11 +2393,11 @@
       <div class="section-head"><div><h2>情侣日记</h2><p>长期纪念网站最有价值的地方，就是把那些普通但柔软的一天，认真保存下来。</p></div></div>
       <div class="card diary-list" id="diaryList"></div>
     </section>
-
     <section class="shell" id="wishes">
-      <div class="section-head"><div><h2>愿望清单</h2><p>把以后想一起做的事情写下来，然后慢慢完成。小目标也算数。</p></div></div>
-      <div class="grid wish-grid" id="wishList"></div>
+      <div class="section-head"><div><h2>我们的约定</h2><p>把想一起做到的事、想一起坚持的习惯，和只属于你们两个人的小规则，认真写下来，然后慢慢完成。</p></div></div>
+      <div class="agreement-grid" id="wishList"></div>
     </section>
+
 
     <section class="shell editor" id="editorPanel">
       <div class="section-head"><div><h2>情侣编辑后台</h2><p>输入共同编辑密码后，就可以修改网站内容。</p></div></div>
@@ -2232,12 +2489,12 @@
           </article>
 
           <article class="card" style="margin-top:18px;">
-            <h3>添加愿望</h3>
+            <h3>添加约定</h3>
             <div class="form-grid">
-              <label>愿望标题<input id="wishTitle" placeholder="比如：一起去看海" /></label>
-              <label>说明<input id="wishText" placeholder="什么时候去、为什么想去" /></label>
+              <label>约定标题<input id="wishTitle" placeholder="比如：不冷战超过一天" /></label>
+              <label>说明<input id="wishText" placeholder="写下这个约定想表达的意义" /></label>
             </div>
-            <div class="toolbar"><button class="mini" id="addWish" type="button">添加愿望</button><button class="mini danger" id="clearWishes" type="button">清空愿望</button></div>
+            <div class="toolbar"><button class="mini" id="addWish" type="button">添加约定</button><button class="mini danger" id="clearWishes" type="button">清空约定</button></div>
           </article>
 
 
@@ -2487,7 +2744,7 @@ grant execute on function public.save_couple_site(text, jsonb, text) to anon, au
       siteName: '我们的恋爱纪念馆',
       names: '我们',
       startDate: '2024-05-20',
-      heroText: '这里收藏我们的日常、纪念日和那些很小却很珍贵的瞬间。以后每一次想起，都可以回到这里看看。',
+      heroText: '这里收藏我们的纪念日倒计时、恋爱时间轨迹、共同约定，以及那些很小却很珍贵的瞬间。以后每一次想起，都可以回到这里看看。',
       heroImage: samplePhoto('我们的首页封面', '💞', '#ff8fab', '#ffd6a5'),
       events: [
         { date: '2024-05-20', title: '故事开始的那一天', text: '从这一天开始，我们多了一个一起记录生活的理由。' },
@@ -2517,10 +2774,10 @@ grant execute on function public.save_couple_site(text, jsonb, text) to anon, au
         { date: '2026-05-23', title: '第一篇网站日记', text: '今天，我们有了一个可以长期记录恋爱的地方。也许现在它还很简单，但它会随着我们的故事慢慢长大。' }
       ],
       wishes: [
-        { title: '一起去看海', text: '挑一个不赶时间的周末，吹海风，拍很多照片。' },
-        { title: '一起做一顿晚饭', text: '不用很厉害，好吃就行，不好吃也可以笑很久。' },
-        { title: '每年写一封信', text: '给未来的彼此，也给当下认真相爱的我们。' },
-        { title: '完成一次旅行', text: '去一个以前只在地图上看过的地方。' }
+        { title: '不冷战超过一天', text: '就算有小情绪，也要把话说开，站回彼此这一边。', done: true },
+        { title: '每年一起过一次周年纪念日', text: '不一定很隆重，但要认真记得这一天。', done: false },
+        { title: '一起去看海', text: '挑一个不赶时间的周末，吹海风，慢慢散步。', done: false },
+        { title: '每年写一封信给未来的我们', text: '把想说的话留给下一年的彼此，再一起打开。', done: false }
       ]
     };
 
@@ -2758,14 +3015,18 @@ grant execute on function public.save_couple_site(text, jsonb, text) to anon, au
         ['今天也要好好相爱', '把今天的小开心存进这里，等以后回头看的时候，会发现普通日子也闪闪发光。', '陪伴'],
         ['普通的一天也值得纪念', '不一定每天都有大事发生，但一起吃饭、聊天、散步，本身就已经很珍贵。', '日常'],
         ['给彼此多一点耐心', '恋爱不是永远完美，而是遇到小情绪时，依然愿意靠近一点点。', '温柔'],
-        ['继续制造新的回忆', '时间轴、日记和愿望清单都会越来越满，像一本慢慢写出来的恋爱书。', '记录'],
+        ['继续制造新的回忆', '时间轨迹、恋爱日记和共同约定都会越来越满，像一本慢慢写出来的恋爱书。', '记录'],
         ['今天适合说一句想你', '有些话不用等到节日才说，今天就很适合。', '想念']
       ];
       const item = notes[Math.abs(days || 0) % notes.length];
-      document.getElementById('noteTitle').textContent = item[0];
-      document.getElementById('noteText').textContent = item[1];
-      document.getElementById('todayKeyword').textContent = item[2];
-      document.getElementById('todayReminder').textContent = item[1].slice(0, 30) + '。';
+      const noteTitle = document.getElementById('noteTitle');
+      const noteText = document.getElementById('noteText');
+      const todayKeyword = document.getElementById('todayKeyword');
+      const todayReminder = document.getElementById('todayReminder');
+      if (noteTitle) noteTitle.textContent = item[0];
+      if (noteText) noteText.textContent = item[1];
+      if (todayKeyword) todayKeyword.textContent = item[2];
+      if (todayReminder) todayReminder.textContent = item[1].slice(0, 30) + '。';
     }
 
     function escapeHTML(value) {
@@ -2789,8 +3050,10 @@ grant execute on function public.save_couple_site(text, jsonb, text) to anon, au
       const days = diffDays(data.startDate);
       document.getElementById('loveDays').textContent = days;
       document.getElementById('statDays').textContent = days;
+      document.getElementById('statEventsHero').textContent = data.events.length;
+      document.getElementById('statPromisesHero').textContent = data.wishes.length;
       document.getElementById('statEvents').textContent = data.events.length;
-      document.getElementById('statDiaries').textContent = data.diaries.length;
+      document.getElementById('statDiaries').textContent = data.wishes.length;
       document.getElementById('startDateText').textContent = `从 ${formatDate(data.startDate)} 开始`;
       document.getElementById('anniversaryLeft').textContent = nextAnniversaryDays(data.startDate);
       renderMilestones(days);
@@ -2820,13 +3083,20 @@ grant execute on function public.save_couple_site(text, jsonb, text) to anon, au
       const sorted = data.events
         .map((event, originalIndex) => ({ ...event, originalIndex }))
         .sort((a,b) => new Date(a.date) - new Date(b.date));
-      if (!sorted.length) { list.innerHTML = '<p class="empty">还没有时间轴事件。登录编辑后添加第一个重要瞬间吧。</p>'; return; }
-      list.innerHTML = sorted.map(event => `
-        <article class="event reveal"><div class="card event-card">
-          <div class="event-date">${escapeHTML(formatDate(event.date))}</div>
-          <div class="event-body"><h3>${escapeHTML(event.title)}</h3><p>${escapeHTML(event.text)}</p>
-          ${isEditorUnlocked ? `<div class="toolbar"><button class="mini danger" onclick="removeItem('events', ${event.originalIndex})" type="button">删除</button></div>` : ''}</div>
-        </div></article>`).join('');
+      if (!sorted.length) { list.innerHTML = '<p class="empty">还没有时间轨迹节点。登录编辑后先添加第一个重要瞬间吧。</p>'; return; }
+      list.innerHTML = sorted.map((event, index) => `
+        <article class="trajectory-event reveal ${index % 2 === 0 ? 'left' : 'right'}">
+          <div class="trajectory-side">
+            <div class="trajectory-date">${escapeHTML(formatDate(event.date))}</div>
+            <div class="card trajectory-card">
+              <span class="trajectory-order">节点 ${String(index + 1).padStart(2, '0')}</span>
+              <h3>${escapeHTML(event.title)}</h3>
+              <p>${escapeHTML(event.text)}</p>
+              ${isEditorUnlocked ? `<div class="toolbar"><button class="mini danger" onclick="removeItem('events', ${event.originalIndex})" type="button">删除</button></div>` : ''}
+            </div>
+          </div>
+          <div class="trajectory-node" aria-hidden="true"></div>
+        </article>`).join('');
     }
 
     function getAlbumRadius() {
@@ -3339,10 +3609,17 @@ grant execute on function public.save_couple_site(text, jsonb, text) to anon, au
 
     function renderWishes() {
       const list = document.getElementById('wishList');
-      if (!data.wishes.length) { list.innerHTML = '<p class="empty">还没有愿望。登录编辑后先写一个“想一起做的事”吧。</p>'; return; }
+      if (!data.wishes.length) { list.innerHTML = '<p class="empty">还没有约定。登录编辑后先写下一条只属于你们的约定吧。</p>'; return; }
       list.innerHTML = data.wishes.map((wish, index) => `
-        <article class="card wish reveal ${wish.done ? 'done' : ''}"><span class="check">✓</span><div><strong>${escapeHTML(wish.title)}</strong><span>${escapeHTML(wish.text)}</span>
-        ${isEditorUnlocked ? `<div class="toolbar"><button class="mini" onclick="toggleWish(${index})" type="button">${wish.done ? '取消完成' : '标记完成'}</button><button class="mini danger" onclick="removeItem('wishes', ${index})" type="button">删除</button></div>` : ''}</div></article>`).join('');
+        <article class="card promise-card reveal ${wish.done ? 'done' : ''}">
+          <div class="promise-top">
+            <span class="promise-tag">约定 ${String(index + 1).padStart(2, '0')}</span>
+            <span class="promise-state">${wish.done ? '已一起实现' : '正在慢慢完成'}</span>
+          </div>
+          <strong>${escapeHTML(wish.title)}</strong>
+          <p>${escapeHTML(wish.text)}</p>
+          ${isEditorUnlocked ? `<div class="toolbar"><button class="mini" onclick="toggleWish(${index})" type="button">${wish.done ? '取消完成' : '标记完成'}</button><button class="mini danger" onclick="removeItem('wishes', ${index})" type="button">删除</button></div>` : ''}
+        </article>`).join('');
     }
 
     function render() {
@@ -3368,7 +3645,7 @@ grant execute on function public.save_couple_site(text, jsonb, text) to anon, au
       if (!isEditorUnlocked) { showToast('请先输入密码解锁编辑'); return; }
       if (!data.wishes[index]) return;
       data.wishes[index].done = !data.wishes[index].done;
-      await persistData(data.wishes[index].done ? '愿望已完成' : '已取消完成状态');
+      await persistData(data.wishes[index].done ? '约定已完成' : '已取消完成状态');
     }
     window.toggleWish = toggleWish;
 
@@ -3603,13 +3880,13 @@ grant execute on function public.save_couple_site(text, jsonb, text) to anon, au
       data.wishes.push({ title, text, done: false });
       document.getElementById('wishTitle').value = '';
       document.getElementById('wishText').value = '';
-      await persistData('愿望已添加');
+      await persistData('约定已添加');
     });
 
     document.getElementById('clearEvents').addEventListener('click', async () => { if (ensureUnlocked() && confirm('确定清空时间轴吗？')) { data.events = []; await persistData('时间轴已清空'); } });
     document.getElementById('clearPhotos').addEventListener('click', async () => { if (ensureUnlocked() && confirm('确定清空照片墙吗？')) { data.photos = []; resetPhotoForm(); await persistData('照片墙已清空'); } });
     document.getElementById('clearDiaries').addEventListener('click', async () => { if (ensureUnlocked() && confirm('确定清空日记吗？')) { data.diaries = []; await persistData('日记已清空'); } });
-    document.getElementById('clearWishes').addEventListener('click', async () => { if (ensureUnlocked() && confirm('确定清空愿望清单吗？')) { data.wishes = []; await persistData('愿望清单已清空'); } });
+    document.getElementById('clearWishes').addEventListener('click', async () => { if (ensureUnlocked() && confirm('确定清空所有约定吗？')) { data.wishes = []; await persistData('约定已清空'); } });
     document.getElementById('resetAll').addEventListener('click', async () => { if (ensureUnlocked() && confirm('确定恢复默认示例吗？当前内容会被覆盖。')) { data = clone(defaultData); await persistData('已恢复默认示例'); } });
 
     document.getElementById('exportData').addEventListener('click', () => {
