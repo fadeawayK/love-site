@@ -1913,6 +1913,81 @@
       body { padding-left: 0; }
     }
 
+  
+
+    /* === 当前修正版：音乐与功能按钮统一放右下角 + 保留退出编辑按钮 === */
+    .music-dock {
+      position: fixed !important;
+      right: 18px !important;
+      bottom: 18px !important;
+      left: auto !important;
+      top: auto !important;
+      z-index: 60 !important;
+      display: grid !important;
+      width: 62px !important;
+      height: 62px !important;
+      padding: 4px !important;
+      border-radius: 50% !important;
+    }
+    .music-dock .dock-text,
+    .music-dock .dock-lyric,
+    .music-dock #dockNext {
+      display: none !important;
+    }
+    .floating-actions {
+      position: fixed !important;
+      right: 18px !important;
+      bottom: 92px !important;
+      left: auto !important;
+      top: auto !important;
+      z-index: 60 !important;
+      display: grid !important;
+      grid-template-columns: 1fr !important;
+      gap: 10px !important;
+    }
+    .float-btn {
+      width: 44px !important;
+      height: 44px !important;
+    }
+    #refreshCloud,
+    #loginCard label:has(#modeText) {
+      display: none !important;
+    }
+    #lockEditor {
+      display: inline-flex !important;
+      align-items: center !important;
+      justify-content: center !important;
+    }
+    #loginCard .toolbar {
+      display: flex !important;
+      gap: 10px !important;
+      flex-wrap: wrap !important;
+    }
+    @media (max-width: 760px) {
+      .music-dock {
+        right: 12px !important;
+        bottom: 12px !important;
+        left: auto !important;
+        top: auto !important;
+        width: 56px !important;
+        height: 56px !important;
+      }
+      .music-dock button#dockPlay {
+        width: 48px !important;
+        height: 48px !important;
+      }
+      .floating-actions {
+        right: 12px !important;
+        bottom: 78px !important;
+        left: auto !important;
+        top: auto !important;
+      }
+      .float-btn {
+        width: 40px !important;
+        height: 40px !important;
+      }
+    }
+
   </style>
 </head>
 <body>
