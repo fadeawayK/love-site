@@ -1538,7 +1538,7 @@
     body {
       padding-left: 0 !important;
     }
-    header, main, footer, .floating-actions, .music-dock, .toast, .lightbox {
+    header, main, footer, .floating-actions, .music-dock, .lightbox {
       position: relative;
       z-index: 4;
     }
@@ -2312,6 +2312,37 @@
       .trajectory-card h3 { font-size: 21px; }
     }
 
+  
+
+    /* === 强制修复：所有操作提示固定在当前视口上方，不再出现在页面底部 === */
+    #toast.toast {
+      position: fixed !important;
+      left: 50% !important;
+      right: auto !important;
+      top: max(86px, calc(env(safe-area-inset-top) + 76px)) !important;
+      bottom: auto !important;
+      transform: translate3d(-50%, -14px, 0) !important;
+      z-index: 99999 !important;
+      pointer-events: none !important;
+      max-width: min(560px, calc(100vw - 32px)) !important;
+      width: max-content !important;
+      min-width: 128px !important;
+      text-align: center !important;
+      white-space: normal !important;
+    }
+    #toast.toast.show {
+      transform: translate3d(-50%, 0, 0) !important;
+      opacity: 1 !important;
+    }
+    @media (max-width: 640px) {
+      #toast.toast {
+        top: max(78px, calc(env(safe-area-inset-top) + 68px)) !important;
+        max-width: calc(100vw - 28px) !important;
+        padding: 11px 16px !important;
+        border-radius: 20px !important;
+      }
+    }
+
   </style>
 </head>
 <body>
@@ -3006,11 +3037,26 @@ grant execute on function public.save_couple_site(text, jsonb, text) to anon, au
         .subscribe();
     }
 
+    let toastTimer = null;
     function showToast(message) {
       const toast = document.getElementById('toast');
+      if (!toast) return;
       toast.textContent = message;
+      // 兜底：有些移动端浏览器会被后面的样式覆盖，这里用内联样式强制固定在当前视口上方。
+      toast.style.position = 'fixed';
+      toast.style.left = '50%';
+      toast.style.right = 'auto';
+      toast.style.top = `max(78px, calc(env(safe-area-inset-top) + 68px))`;
+      toast.style.bottom = 'auto';
+      toast.style.zIndex = '99999';
+      toast.style.pointerEvents = 'none';
+      toast.style.maxWidth = 'calc(100vw - 32px)';
+      toast.style.width = 'max-content';
+      toast.classList.remove('show');
+      void toast.offsetWidth;
       toast.classList.add('show');
-      setTimeout(() => toast.classList.remove('show'), 1900);
+      clearTimeout(toastTimer);
+      toastTimer = setTimeout(() => toast.classList.remove('show'), 1900);
     }
 
     function formatDate(dateString) {
