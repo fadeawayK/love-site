@@ -761,10 +761,289 @@
       .music-manage-actions { justify-content:flex-start; }
     }
 
+
+    /* === 炫酷浪漫开场粒子 + 迷你音乐图标 === */
+    .romantic-bg-canvas {
+      position: fixed;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: -1;
+      opacity: .52;
+      mix-blend-mode: screen;
+    }
+    body::before { background: rgba(255,143,171,.20); }
+    body::after { background: rgba(255,214,165,.26); }
+    .hero-card, .card, .album-showcase {
+      position: relative;
+      overflow: hidden;
+    }
+    .hero-card::after, .card::before, .album-showcase::before {
+      content: "";
+      position: absolute;
+      inset: -80px;
+      pointer-events: none;
+      opacity: .34;
+      background: linear-gradient(115deg, transparent 24%, rgba(255,255,255,.42) 42%, transparent 60%);
+      transform: translateX(-62%) rotate(8deg);
+      animation: romanticShine 8.5s ease-in-out infinite;
+    }
+    .card::before, .album-showcase::before { z-index: 0; opacity: .20; animation-delay: -2.5s; }
+    .card > *, .album-showcase > * { position: relative; z-index: 1; }
+    @keyframes romanticShine {
+      0%, 62%, 100% { transform: translateX(-68%) rotate(8deg); }
+      78% { transform: translateX(68%) rotate(8deg); }
+    }
+
+    .intro-gate {
+      position: fixed;
+      inset: 0;
+      z-index: 999;
+      display: grid;
+      place-items: center;
+      overflow: hidden;
+      background:
+        radial-gradient(circle at 18% 24%, rgba(255, 143, 171, .42), transparent 30%),
+        radial-gradient(circle at 82% 18%, rgba(255, 214, 165, .36), transparent 28%),
+        radial-gradient(circle at 50% 80%, rgba(180, 160, 255, .25), transparent 30%),
+        linear-gradient(135deg, #27131d 0%, #5b2636 44%, #ffe3ef 100%);
+      color: #fffafc;
+      transition: opacity .78s ease, visibility .78s ease, transform .78s ease;
+    }
+    .intro-gate.hide {
+      opacity: 0;
+      visibility: hidden;
+      transform: scale(1.045);
+      pointer-events: none;
+    }
+    .intro-canvas {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+    }
+    .intro-card {
+      position: relative;
+      width: min(720px, calc(100% - 34px));
+      border-radius: 38px;
+      padding: clamp(28px, 5vw, 54px);
+      background: rgba(255,255,255,.13);
+      border: 1px solid rgba(255,255,255,.34);
+      box-shadow: 0 30px 90px rgba(36, 12, 24, .35);
+      backdrop-filter: blur(22px);
+      text-align: center;
+      overflow: hidden;
+    }
+    .intro-card::before {
+      content:"";
+      position:absolute;
+      inset:-2px;
+      border-radius: inherit;
+      background: conic-gradient(from 150deg, rgba(255,143,171,.0), rgba(255,255,255,.68), rgba(255,214,165,.58), rgba(255,143,171,.0));
+      opacity:.32;
+      filter: blur(18px);
+      animation: rotateGlow 8s linear infinite;
+    }
+    .intro-card > * { position: relative; z-index: 1; }
+    @keyframes rotateGlow { to { transform: rotate(360deg); } }
+    .intro-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 9px 14px;
+      border-radius: 999px;
+      background: rgba(255,255,255,.18);
+      border: 1px solid rgba(255,255,255,.28);
+      font-weight: 800;
+      letter-spacing: .08em;
+      color: #ffe5ef;
+      text-transform: uppercase;
+      margin-bottom: 18px;
+    }
+    .intro-title {
+      font-size: clamp(38px, 8vw, 76px);
+      line-height: 1.02;
+      letter-spacing: -2px;
+      margin-bottom: 16px;
+      text-shadow: 0 12px 44px rgba(0,0,0,.24);
+    }
+    .intro-title span {
+      background: linear-gradient(110deg, #fff, #ffd6e2, #ffc46a);
+      -webkit-background-clip: text;
+      color: transparent;
+    }
+    .intro-subtitle {
+      max-width: 620px;
+      margin: 0 auto 28px;
+      color: rgba(255,250,252,.86);
+      line-height: 1.85;
+      font-size: clamp(15px, 2.4vw, 18px);
+    }
+    .intro-slider {
+      position: relative;
+      width: min(520px, 100%);
+      height: 68px;
+      margin: 0 auto;
+      border-radius: 999px;
+      background: rgba(255,255,255,.18);
+      border: 1px solid rgba(255,255,255,.30);
+      overflow: hidden;
+      box-shadow: inset 0 0 0 1px rgba(255,255,255,.08), 0 18px 50px rgba(0,0,0,.18);
+      user-select: none;
+      touch-action: none;
+    }
+    .intro-fill {
+      position: absolute;
+      inset: 0 auto 0 0;
+      width: 0%;
+      border-radius: inherit;
+      background: linear-gradient(90deg, rgba(255,143,171,.70), rgba(255,214,165,.82));
+      box-shadow: 0 0 34px rgba(255,143,171,.42);
+    }
+    .intro-track-text {
+      position: absolute;
+      inset: 0;
+      display: grid;
+      place-items: center;
+      color: rgba(255,255,255,.86);
+      font-weight: 900;
+      letter-spacing: .08em;
+      pointer-events: none;
+    }
+    .intro-knob {
+      position: absolute;
+      left: 8px;
+      top: 8px;
+      width: 52px;
+      height: 52px;
+      border: 0;
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      font-size: 24px;
+      cursor: grab;
+      color: #fff;
+      background: linear-gradient(135deg, #ff7fa5, #ffd1a3);
+      box-shadow: 0 12px 34px rgba(255, 94, 142, .42);
+      transition: transform .16s ease;
+      touch-action: none;
+    }
+    .intro-knob:active { cursor: grabbing; transform: scale(1.08); }
+    .intro-skip {
+      margin-top: 18px;
+      border: 0;
+      border-radius: 999px;
+      padding: 10px 18px;
+      color: #fff;
+      background: rgba(255,255,255,.15);
+      border: 1px solid rgba(255,255,255,.28);
+      cursor: pointer;
+      font-weight: 800;
+    }
+
+    #music {
+      display: none !important;
+    }
+    .hidden-music-config {
+      display: none !important;
+    }
+    .music-dock {
+      left: 24px;
+      bottom: 24px;
+      width: 62px;
+      height: 62px;
+      padding: 0;
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      background: rgba(255,255,255,.84);
+      border: 1px solid rgba(255,143,171,.32);
+      box-shadow: 0 18px 55px rgba(255,143,171,.34);
+      backdrop-filter: blur(18px);
+      overflow: visible;
+    }
+    .music-dock::before, .music-dock::after {
+      content: "";
+      position: absolute;
+      inset: -8px;
+      border-radius: 50%;
+      border: 1px solid rgba(255,143,171,.30);
+      opacity: 0;
+      transform: scale(.78);
+      pointer-events: none;
+    }
+    .music-dock.playing::before { animation: musicPulse 1.8s ease-out infinite; }
+    .music-dock.playing::after { animation: musicPulse 1.8s ease-out infinite .55s; }
+    @keyframes musicPulse {
+      0% { opacity: .62; transform: scale(.78); }
+      100% { opacity: 0; transform: scale(1.62); }
+    }
+    .music-dock button#dockPlay {
+      width: 52px;
+      height: 52px;
+      font-size: 22px;
+      padding: 0;
+      box-shadow: 0 12px 30px rgba(255,143,171,.42);
+    }
+    .music-dock .dock-text {
+      position: absolute;
+      left: 74px;
+      bottom: 7px;
+      width: max-content;
+      max-width: 250px;
+      display: block;
+      padding: 10px 14px;
+      border-radius: 18px;
+      color: var(--text);
+      background: rgba(255,255,255,.86);
+      border: 1px solid rgba(255,143,171,.22);
+      box-shadow: 0 12px 32px rgba(255,143,171,.18);
+      opacity: 0;
+      transform: translateX(-6px);
+      pointer-events: none;
+      transition: .22s ease;
+    }
+    .music-dock:hover .dock-text { opacity: 1; transform: translateX(0); }
+    .music-dock .dock-text strong { display:block; font-size: 13px; white-space: nowrap; }
+    .music-dock .dock-text span { display:block; font-size: 12px; color: var(--muted); max-width: 230px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+    .music-dock button#dockNext { display: none !important; }
+    .floating-actions { bottom: 22px; }
+
+    @media (max-width:640px) {
+      .intro-card { border-radius: 28px; padding: 26px 18px; }
+      .intro-slider { height: 62px; }
+      .intro-knob { width: 48px; height: 48px; }
+      .music-dock { left: 14px; bottom: 14px; width: 58px; height: 58px; }
+      .music-dock button#dockPlay { width: 49px; height: 49px; }
+      .music-dock .dock-text { display:none; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .intro-card::before, .hero-card::after, .card::before, .album-showcase::before,
+      .music-dock.playing::before, .music-dock.playing::after { animation: none !important; }
+    }
+
   </style>
 </head>
 <body>
   <div class="scroll-progress" id="scrollProgress" aria-hidden="true"></div>
+
+  <canvas class="romantic-bg-canvas" id="romanticBgCanvas" aria-hidden="true"></canvas>
+  <div class="intro-gate" id="introGate" role="dialog" aria-modal="true" aria-label="网站开场动画">
+    <canvas class="intro-canvas" id="introCanvas" aria-hidden="true"></canvas>
+    <div class="intro-card">
+      <div class="intro-badge">✦ Love Memory ✦</div>
+      <h1 class="intro-title">欢迎来到<br><span>我们的恋爱纪念馆</span></h1>
+      <p class="intro-subtitle">先让星光和爱心粒子亮起来。拖动下面的小爱心到终点，进入只属于我们的页面。</p>
+      <div class="intro-slider" id="introSlider">
+        <div class="intro-fill" id="introFill"></div>
+        <div class="intro-track-text" id="introTrackText">拖动爱心进入主页面</div>
+        <button class="intro-knob" id="introKnob" type="button" aria-label="拖动进入主页面">❤</button>
+      </div>
+      <button class="intro-skip" id="introSkip" type="button">直接进入</button>
+    </div>
+  </div>
   <header class="shell nav">
     <a class="brand" href="#home" aria-label="回到首页"><span class="heart">❤</span><span id="siteNameNav">我们的恋爱纪念馆</span></a>
     <nav class="links" aria-label="主导航">
@@ -851,33 +1130,19 @@
       </div>
     </section>
 
-    <section class="shell" id="music">
-      <div class="section-head"><div><h2>恋爱背景音乐</h2><p>打开网页会自动尝试播放背景音乐；如果浏览器拦截了自动播放，点一下播放按钮就可以继续。这里也可以切换不同歌曲。</p></div></div>
-      <div class="card music-card">
-        <div class="music-visual" id="musicVisual" aria-hidden="true"></div>
-        <div class="music-meta">
-          <div class="music-label">Love Radio</div>
-          <h3 id="musicTitle">我们的背景音乐</h3>
-          <p id="musicDesc">可以放你们喜欢的歌、纯音乐、旅行 BGM。后续在编辑后台里替换音乐链接即可。</p>
-          <label class="music-select">选择歌曲
-            <select id="musicSelect" aria-label="选择背景音乐"></select>
-          </label>
-          <div class="music-controls">
-            <button class="mini" id="musicPrevBtn" type="button">上一首</button>
-            <button class="mini" id="musicPlayBtn" type="button">播放</button>
-            <button class="mini" id="musicNextBtn" type="button">下一首</button>
-            <span class="volume-wrap">音量 <input id="musicVolume" type="range" min="0" max="100" value="55" /></span>
-          </div>
-          <p class="music-tip" id="musicTip">正在准备音乐播放器。</p>
-          <div class="lyrics-panel" id="lyricsPanel" aria-label="同步歌词">
-            <div class="lyric-empty">歌词加载中...</div>
-          </div>
-          <div class="netease-wrap" id="neteaseWrap">
-            <iframe class="netease-frame" id="neteaseFrame" title="网易云音乐播放器" allow="autoplay"></iframe>
-            <div class="netease-note">网易云歌曲会以外链播放器显示。由于版权和浏览器限制，部分歌曲可能无法外链播放；如果需要完全可控的播放/暂停，建议使用 mp3/m4a 直链。</div>
-          </div>
-        </div>
-      </div>
+
+    <section class="shell" id="music" aria-hidden="true">
+      <div id="musicVisual"></div>
+      <h3 id="musicTitle">恶作剧 - 林依晨</h3>
+      <p id="musicDesc"></p>
+      <select id="musicSelect" aria-label="选择背景音乐"></select>
+      <button id="musicPrevBtn" type="button">上一首</button>
+      <button id="musicPlayBtn" type="button">播放</button>
+      <button id="musicNextBtn" type="button">下一首</button>
+      <input id="musicVolume" type="range" min="0" max="100" value="55" />
+      <p id="musicTip">准备播放</p>
+      <div id="lyricsPanel"></div>
+      <div id="neteaseWrap"><iframe id="neteaseFrame" title="网易云音乐播放器" allow="autoplay"></iframe></div>
     </section>
 
     <section class="shell" id="diary">
@@ -988,24 +1253,19 @@
             <div class="toolbar"><button class="mini" id="addWish" type="button">添加愿望</button><button class="mini danger" id="clearWishes" type="button">清空愿望</button></div>
           </article>
 
-          <article class="card" style="margin-top:18px;">
-            <h3>音乐播放器管理</h3>
-            <p class="tips">这里可以管理背景音乐。示例歌曲只是为了预览效果，正式上线时建议替换成你自己的 MP3 链接或对象存储链接。</p>
-            <div class="form-grid">
-              <label>歌曲名称<input id="trackTitle" placeholder="比如：恶作剧 / 我们的第一首歌" /></label>
-              <label>音乐类型<select id="trackType"><option value="audio">音频直链 mp3/m4a/ogg</option><option value="netease">网易云歌曲链接 / 歌曲 ID</option></select></label>
-              <label class="full">音乐链接 / 网易云分享链接 / 歌曲 ID<input id="trackUrl" placeholder="直链示例：https://.../song.mp3；网易云可粘贴分享链接或 id= 后面的数字" /></label>
-              <label class="full">歌词 LRC 链接，可选<input id="trackLyricUrl" placeholder="例如：./ezuoju.lrc；没有歌词可以留空" /></label>
-              <label class="full inline-check"><input id="musicAutoplay" type="checkbox" /> 打开网页后自动尝试播放音乐</label>
-              <p class="tips full">添加网易云歌曲时，不需要也不建议在网页里登录账号。你可以先在网易云里搜索《恶作剧》，复制歌曲分享链接，粘贴到这里；网页会自动提取歌曲 ID 并嵌入网易云外链播放器。</p>
-            </div>
-            <div class="edit-hint" id="trackEditHint">正在修改歌曲：保存后会替换原来的歌曲信息。</div>
-            <div class="toolbar">
-              <button class="mini" id="addTrack" type="button">添加歌曲</button>
-              <button class="mini" id="cancelTrackEdit" type="button" style="display:none;">取消修改</button>
-              <button class="mini" id="restoreSampleTracks" type="button">恢复示例音乐</button>
-              <button class="mini danger" id="clearTracks" type="button">清空歌单</button>
-            </div>
+
+          <article class="card hidden-music-config" aria-hidden="true">
+            <h3>音乐隐藏配置</h3>
+            <input id="trackTitle" value="恶作剧 - 林依晨" />
+            <select id="trackType"><option value="audio">音频直链 mp3/m4a/ogg</option><option value="netease">网易云歌曲链接 / 歌曲 ID</option></select>
+            <input id="trackUrl" value="./ezuoju.mp3" />
+            <input id="trackLyricUrl" value="./ezuoju.lrc" />
+            <label><input id="musicAutoplay" type="checkbox" checked /> 自动播放</label>
+            <div id="trackEditHint"></div>
+            <button id="addTrack" type="button">添加歌曲</button>
+            <button id="cancelTrackEdit" type="button">取消修改</button>
+            <button id="restoreSampleTracks" type="button">恢复示例音乐</button>
+            <button id="clearTracks" type="button">清空歌单</button>
             <div class="music-manager" id="musicManageList"></div>
           </article>
 
@@ -1036,9 +1296,10 @@
     </div>
   </div>
   <audio id="loveAudio" preload="metadata"></audio>
-  <div class="music-dock" id="musicDock" aria-label="音乐播放器">
+
+  <div class="music-dock" id="musicDock" aria-label="背景音乐：点击播放或暂停" title="点击播放 / 暂停音乐">
     <button id="dockPlay" type="button" aria-label="播放或暂停音乐">▶</button>
-    <div class="dock-text"><strong id="dockTitle">背景音乐</strong><span id="dockStatus">准备播放</span></div>
+    <div class="dock-text"><strong id="dockTitle">恶作剧 - 林依晨</strong><span id="dockStatus">点击播放 / 暂停</span></div>
     <button id="dockNext" type="button" aria-label="下一首">♪</button>
   </div>
   <div class="floating-actions" aria-label="快捷操作">
@@ -1731,12 +1992,10 @@ grant execute on function public.save_couple_site(text, jsonb, text) to anon, au
 
     function normalizeMusic() {
       if (!data.music || typeof data.music !== 'object') data.music = clone(defaultData.music);
-      if (!Array.isArray(data.music.tracks)) data.music.tracks = clone(defaultData.music.tracks);
-      data.music.tracks = data.music.tracks.map(normalizeTrackRecord).filter(Boolean);
-      if (!data.music.tracks.length) data.music.tracks = clone(defaultData.music.tracks).map(normalizeTrackRecord).filter(Boolean);
+      const onlyTrack = normalizeTrackRecord(defaultData.music.tracks[0]) || { title: '恶作剧 - 林依晨', type: 'audio', url: './ezuoju.mp3', lyricUrl: './ezuoju.lrc' };
+      data.music.tracks = [onlyTrack];
+      data.music.currentIndex = 0;
       data.music.autoplay = data.music.autoplay !== false;
-      if (!Number.isInteger(data.music.currentIndex)) data.music.currentIndex = 0;
-      if (data.music.currentIndex < 0 || data.music.currentIndex >= data.music.tracks.length) data.music.currentIndex = 0;
     }
 
     function currentTrack() {
@@ -2498,6 +2757,190 @@ grant execute on function public.save_couple_site(text, jsonb, text) to anon, au
     document.getElementById('diaryDate').value = today;
     document.getElementById('eventDate').value = today;
     document.getElementById('sqlBox').textContent = SUPABASE_SQL;
+
+
+
+    function initRomanticIntro() {
+      const gate = document.getElementById('introGate');
+      const canvas = document.getElementById('introCanvas');
+      const slider = document.getElementById('introSlider');
+      const knob = document.getElementById('introKnob');
+      const fill = document.getElementById('introFill');
+      const skip = document.getElementById('introSkip');
+      if (!gate || !canvas || !slider || !knob || !fill) return;
+
+      const ctx = canvas.getContext('2d');
+      let width = 0;
+      let height = 0;
+      let particles = [];
+      let rafId = 0;
+      const reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+      function resize() {
+        const ratio = Math.min(window.devicePixelRatio || 1, 2);
+        width = canvas.clientWidth || window.innerWidth;
+        height = canvas.clientHeight || window.innerHeight;
+        canvas.width = Math.floor(width * ratio);
+        canvas.height = Math.floor(height * ratio);
+        ctx.setTransform(ratio, 0, 0, ratio, 0, 0);
+        const total = reduceMotion ? 34 : Math.min(130, Math.floor(width * height / 10500));
+        particles = Array.from({ length: total }, () => ({
+          x: Math.random() * width,
+          y: Math.random() * height,
+          r: 1.1 + Math.random() * 3.6,
+          vx: (Math.random() - .5) * .38,
+          vy: -(.16 + Math.random() * .45),
+          a: .32 + Math.random() * .62,
+          hue: Math.random() < .62 ? 338 : (38 + Math.random() * 28),
+          kind: Math.random() < .28 ? 'heart' : 'dot',
+          spin: Math.random() * Math.PI * 2
+        }));
+      }
+
+      function drawHeart(ctx, x, y, size, alpha, spin) {
+        ctx.save();
+        ctx.translate(x, y);
+        ctx.rotate(Math.sin(spin) * .24);
+        ctx.scale(size / 18, size / 18);
+        ctx.beginPath();
+        ctx.moveTo(0, 5);
+        ctx.bezierCurveTo(-12, -5, -10, -17, 0, -10);
+        ctx.bezierCurveTo(10, -17, 12, -5, 0, 5);
+        ctx.closePath();
+        ctx.fillStyle = `rgba(255, 190, 210, ${alpha})`;
+        ctx.shadowColor = 'rgba(255, 143, 171, .75)';
+        ctx.shadowBlur = 14;
+        ctx.fill();
+        ctx.restore();
+      }
+
+      function tick() {
+        ctx.clearRect(0, 0, width, height);
+        const gradient = ctx.createRadialGradient(width * .5, height * .45, 10, width * .5, height * .45, Math.max(width, height) * .7);
+        gradient.addColorStop(0, 'rgba(255,255,255,.12)');
+        gradient.addColorStop(1, 'rgba(255,255,255,0)');
+        ctx.fillStyle = gradient;
+        ctx.fillRect(0, 0, width, height);
+
+        particles.forEach(p => {
+          p.x += p.vx;
+          p.y += p.vy;
+          p.spin += .024;
+          if (p.y < -28) { p.y = height + 28; p.x = Math.random() * width; }
+          if (p.x < -30) p.x = width + 30;
+          if (p.x > width + 30) p.x = -30;
+          if (p.kind === 'heart') drawHeart(ctx, p.x, p.y, p.r * 8, p.a, p.spin);
+          else {
+            ctx.beginPath();
+            ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+            ctx.fillStyle = `hsla(${p.hue}, 95%, 78%, ${p.a})`;
+            ctx.shadowColor = `hsla(${p.hue}, 95%, 78%, .9)`;
+            ctx.shadowBlur = 12;
+            ctx.fill();
+            ctx.shadowBlur = 0;
+          }
+        });
+        rafId = requestAnimationFrame(tick);
+      }
+
+      let dragging = false;
+      let progress = 0;
+      function setProgress(value) {
+        progress = Math.max(0, Math.min(1, value));
+        const max = slider.clientWidth - knob.clientWidth - 16;
+        knob.style.transform = `translateX(${progress * max}px)`;
+        fill.style.width = `${progress * 100}%`;
+        if (progress > .78) enterSite();
+      }
+      function pointerProgress(event) {
+        const rect = slider.getBoundingClientRect();
+        return (event.clientX - rect.left - knob.clientWidth / 2) / (rect.width - knob.clientWidth - 16);
+      }
+      function enterSite() {
+        if (gate.classList.contains('hide')) return;
+        gate.classList.add('hide');
+        cancelAnimationFrame(rafId);
+        setTimeout(() => gate.remove(), 850);
+        tryPlayMusic(true);
+        setTimeout(() => popHeart(window.innerWidth / 2, window.innerHeight / 2), 120);
+      }
+
+      knob.addEventListener('pointerdown', event => {
+        dragging = true;
+        knob.setPointerCapture(event.pointerId);
+        setProgress(pointerProgress(event));
+      });
+      knob.addEventListener('pointermove', event => { if (dragging) setProgress(pointerProgress(event)); });
+      knob.addEventListener('pointerup', event => {
+        dragging = false;
+        try { knob.releasePointerCapture(event.pointerId); } catch {}
+        if (progress <= .78) setProgress(0);
+      });
+      slider.addEventListener('pointerdown', event => setProgress(pointerProgress(event)));
+      if (skip) skip.addEventListener('click', enterSite);
+      window.addEventListener('resize', resize, { passive: true });
+      resize();
+      tick();
+    }
+
+    function initAmbientParticles() {
+      const canvas = document.getElementById('romanticBgCanvas');
+      if (!canvas) return;
+      const ctx = canvas.getContext('2d');
+      let width = 0;
+      let height = 0;
+      let dots = [];
+      const reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      function resize() {
+        const ratio = Math.min(window.devicePixelRatio || 1, 2);
+        width = canvas.clientWidth || window.innerWidth;
+        height = canvas.clientHeight || window.innerHeight;
+        canvas.width = Math.floor(width * ratio);
+        canvas.height = Math.floor(height * ratio);
+        ctx.setTransform(ratio, 0, 0, ratio, 0, 0);
+        const total = reduceMotion ? 18 : Math.min(72, Math.floor(width * height / 21000));
+        dots = Array.from({ length: total }, () => ({
+          x: Math.random() * width,
+          y: Math.random() * height,
+          r: .7 + Math.random() * 2.4,
+          vx: (Math.random() - .5) * .18,
+          vy: (Math.random() - .5) * .18,
+          a: .16 + Math.random() * .30
+        }));
+      }
+      function frame() {
+        ctx.clearRect(0, 0, width, height);
+        dots.forEach((p, i) => {
+          p.x += p.vx; p.y += p.vy;
+          if (p.x < 0 || p.x > width) p.vx *= -1;
+          if (p.y < 0 || p.y > height) p.vy *= -1;
+          ctx.beginPath();
+          ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+          ctx.fillStyle = `rgba(255, 143, 171, ${p.a})`;
+          ctx.fill();
+          for (let j = i + 1; j < dots.length; j++) {
+            const q = dots[j];
+            const dx = p.x - q.x, dy = p.y - q.y;
+            const d = Math.hypot(dx, dy);
+            if (d < 120) {
+              ctx.beginPath();
+              ctx.moveTo(p.x, p.y);
+              ctx.lineTo(q.x, q.y);
+              ctx.strokeStyle = `rgba(255, 143, 171, ${(1 - d / 120) * .08})`;
+              ctx.stroke();
+            }
+          }
+        });
+        requestAnimationFrame(frame);
+      }
+      window.addEventListener('resize', resize, { passive: true });
+      resize();
+      frame();
+    }
+
+
+    initAmbientParticles();
+    initRomanticIntro();
 
     initCloud();
     render();
