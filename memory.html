@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="description" content="一个可以记录恋爱天数、时间轴、情侣日记和愿望清单的双人纪念网站。" />
+  <meta name="description" content="一个可以记录恋爱天数、时间线、同行清单和纪念日倒计时的双人纪念网站。" />
   <meta name="theme-color" content="#ff8fab" />
   <title>我们的恋爱纪念馆</title>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -2306,9 +2306,8 @@
     <a class="brand" href="#home" aria-label="回到首页"><span class="heart">❤</span><span id="siteNameNav">我们的恋爱纪念馆</span></a>
     <nav class="links" aria-label="主导航">
       <a href="#days">纪念日</a>
-      <a href="#timeline">时间轨迹</a>
-      <a href="#wishes">我们的约定</a>
-      <a href="#diary">恋爱日记</a>
+      <a href="#timeline">时间线</a>
+      <a href="#wishes">同行清单</a>
       <button class="ghost-btn" id="toggleEditor" type="button">登录编辑</button>
     </nav>
   </header>
@@ -2318,17 +2317,17 @@
       <div>
         <div class="kicker">💌 慢慢记录 · 双方同步编辑</div>
         <h1><span id="heroNames">我们</span>的<br><span class="gradient-text">恋爱纪念馆</span></h1>
-        <p class="lead" id="heroText">这里收藏我们的纪念日倒计时、恋爱时间轨迹、共同约定，以及那些很小却很珍贵的瞬间。以后每一次想起，都可以回到这里看看。</p>
+        <p class="lead" id="heroText">这里收藏我们的纪念日倒计时、时间线、同行清单，以及那些很小却很珍贵的瞬间。以后每一次想起，都可以回到这里看看。</p>
         <div class="hero-actions">
-          <a class="btn" href="#timeline">查看时间轨迹</a>
-          <a class="btn secondary" href="#wishes">翻开我们的约定</a>
+          <a class="btn" href="#timeline">查看时间线</a>
+          <a class="btn secondary" href="#wishes">打开同行清单</a>
           <button class="btn secondary" id="shareSite" type="button">复制网站链接</button>
           <span class="status-pill"><span class="dot locked" id="cloudDot"></span><span id="cloudText">本地预览模式</span></span>
         </div>
         <div class="stats" aria-label="恋爱统计">
           <div class="stat"><b id="statDays">0</b><small>已经一起走过的天数</small></div>
-          <div class="stat"><b id="statEventsHero">0</b><small>发光时间轨迹里的节点</small></div>
-          <div class="stat"><b id="statPromisesHero">0</b><small>一起守护的约定</small></div>
+          <div class="stat"><b id="statEventsHero">0</b><small>时间线里的发光节点</small></div>
+          <div class="stat"><b id="statPromisesHero">0</b><small>一起完成的清单</small></div>
         </div>
       </div>
       <div class="hero-card" id="heroCard">
@@ -2344,13 +2343,13 @@
         <article class="card countdown-card"><h3>距离特别节点</h3><div class="count-big"><span id="nextLoveDay">0</span><small>天</small></div><p>下一次 520 / 1314 / 特别数字纪念点。</p></article>
       </div>
       <div class="milestone-countdown" aria-label="纪念日补充信息">
-        <div class="milestone-item"><b id="statEvents">0</b><span>已经写进时间轨迹的重要节点</span></div>
-        <div class="milestone-item"><b id="statDiaries">0</b><span>一起许下并守护的约定</span></div>
+        <div class="milestone-item"><b id="statEvents">0</b><span>已经写进时间线的重要节点</span></div>
+        <div class="milestone-item"><b id="statDiaries">0</b><span>正在一起完成的清单</span></div>
         <div class="milestone-item"><b id="lastUpdated">刚刚</b><span>最近一次内容更新</span></div>
       </div>
     </section>
     <section class="shell" id="timeline">
-      <div class="section-head"><div><h2>恋爱时间轨迹</h2><p>用一条发光的时间轨迹，把认识、约会、旅行、争吵后的和好，以及所有值得被保存的瞬间串起来。</p></div></div>
+      <div class="section-head"><div><h2>时间线</h2><p>用一条发光点时间轨迹，把认识、约会、旅行、争吵后的和好，以及所有值得被保存的瞬间串起来。</p></div></div>
       <div class="trajectory-timeline" id="timelineList"></div>
     </section>
 
@@ -2388,13 +2387,8 @@
       <div id="lyricsPanel"></div>
       <div id="neteaseWrap"><iframe id="neteaseFrame" title="网易云音乐播放器" allow="autoplay"></iframe></div>
     </section>
-
-    <section class="shell" id="diary">
-      <div class="section-head"><div><h2>情侣日记</h2><p>长期纪念网站最有价值的地方，就是把那些普通但柔软的一天，认真保存下来。</p></div></div>
-      <div class="card diary-list" id="diaryList"></div>
-    </section>
-    <section class="shell" id="wishes">
-      <div class="section-head"><div><h2>我们的约定</h2><p>把想一起做到的事、想一起坚持的习惯，和只属于你们两个人的小规则，认真写下来，然后慢慢完成。</p></div></div>
+<section class="shell" id="wishes">
+      <div class="section-head"><div><h2>同行清单</h2><p>把想一起完成的事、想一起坚持的习惯，和只属于你们两个人的小目标放在这里，慢慢点亮。</p></div></div>
       <div class="agreement-grid" id="wishList"></div>
     </section>
 
@@ -2444,20 +2438,21 @@
               <label>网站名字<input id="inputSiteName" placeholder="我们的恋爱纪念馆" /></label>
               <label>你们的称呼<input id="inputNames" placeholder="小明和小红" /></label>
               <label>在一起日期<input id="inputStartDate" type="date" /></label>
-              <label>首页照片链接<input id="inputHeroImage" placeholder="粘贴图片链接，或先留空" /></label>
-              <label class="full">首页文案<textarea id="inputHeroText" placeholder="写一句你想放在首页的话"></textarea></label>
+              <label>首页照片链接<input id="inputHeroImage" placeholder="粘贴图片链接，或留空改用本地照片" /></label>
+              <label>上传主页图片<input id="inputHeroFile" type="file" accept="image/*" /></label>
+              <label class="full"><small style="display:block; color:var(--muted); margin-bottom:8px;">手机打开网站时，这里可以直接从相册选择照片作为首页封面。</small>首页文案<textarea id="inputHeroText" placeholder="写一句你想放在首页的话"></textarea></label>
             </div>
             <div class="toolbar"><button class="mini" id="saveBasic" type="button">保存基础信息</button></div>
           </article>
 
           <article class="card" style="margin-top:18px;">
-            <h3>添加时间轴事件</h3>
+            <h3>添加时间线节点</h3>
             <div class="form-grid">
               <label>日期<input id="eventDate" type="date" /></label>
               <label>标题<input id="eventTitle" placeholder="比如：第一次正式约会" /></label>
               <label class="full">内容<textarea id="eventText" placeholder="记录那一天发生了什么"></textarea></label>
             </div>
-            <div class="toolbar"><button class="mini" id="addEvent" type="button">添加事件</button><button class="mini danger" id="clearEvents" type="button">清空时间轴</button></div>
+            <div class="toolbar"><button class="mini" id="addEvent" type="button">添加节点</button><button class="mini danger" id="clearEvents" type="button">清空时间线</button></div>
           </article>
 
           <article class="card" style="margin-top:18px; display:none !important;" aria-hidden="true">
@@ -2477,24 +2472,13 @@
             </div>
             <div class="photo-manager" id="photoManageList"></div>
           </article>
-
-          <article class="card" style="margin-top:18px;">
-            <h3>添加情侣日记</h3>
+<article class="card" style="margin-top:18px;">
+            <h3>添加同行清单</h3>
             <div class="form-grid">
-              <label>日期<input id="diaryDate" type="date" /></label>
-              <label>标题<input id="diaryTitle" placeholder="比如：今天一起吃了火锅" /></label>
-              <label class="full">日记内容<textarea id="diaryText" placeholder="写下今天的小故事"></textarea></label>
+              <label>清单标题<input id="wishTitle" placeholder="比如：一起去看海" /></label>
+              <label>说明<input id="wishText" placeholder="写下这个小目标想表达的意义" /></label>
             </div>
-            <div class="toolbar"><button class="mini" id="addDiary" type="button">添加日记</button><button class="mini danger" id="clearDiaries" type="button">清空日记</button></div>
-          </article>
-
-          <article class="card" style="margin-top:18px;">
-            <h3>添加约定</h3>
-            <div class="form-grid">
-              <label>约定标题<input id="wishTitle" placeholder="比如：不冷战超过一天" /></label>
-              <label>说明<input id="wishText" placeholder="写下这个约定想表达的意义" /></label>
-            </div>
-            <div class="toolbar"><button class="mini" id="addWish" type="button">添加约定</button><button class="mini danger" id="clearWishes" type="button">清空约定</button></div>
+            <div class="toolbar"><button class="mini" id="addWish" type="button">添加清单</button><button class="mini danger" id="clearWishes" type="button">清空清单</button></div>
           </article>
 
 
@@ -2744,7 +2728,7 @@ grant execute on function public.save_couple_site(text, jsonb, text) to anon, au
       siteName: '我们的恋爱纪念馆',
       names: '我们',
       startDate: '2024-05-20',
-      heroText: '这里收藏我们的纪念日倒计时、恋爱时间轨迹、共同约定，以及那些很小却很珍贵的瞬间。以后每一次想起，都可以回到这里看看。',
+      heroText: '这里收藏我们的纪念日倒计时、时间线、同行清单，以及那些很小却很珍贵的瞬间。以后每一次想起，都可以回到这里看看。',
       heroImage: samplePhoto('我们的首页封面', '💞', '#ff8fab', '#ffd6a5'),
       events: [
         { date: '2024-05-20', title: '故事开始的那一天', text: '从这一天开始，我们多了一个一起记录生活的理由。' },
@@ -3015,7 +2999,7 @@ grant execute on function public.save_couple_site(text, jsonb, text) to anon, au
         ['今天也要好好相爱', '把今天的小开心存进这里，等以后回头看的时候，会发现普通日子也闪闪发光。', '陪伴'],
         ['普通的一天也值得纪念', '不一定每天都有大事发生，但一起吃饭、聊天、散步，本身就已经很珍贵。', '日常'],
         ['给彼此多一点耐心', '恋爱不是永远完美，而是遇到小情绪时，依然愿意靠近一点点。', '温柔'],
-        ['继续制造新的回忆', '时间轨迹、恋爱日记和共同约定都会越来越满，像一本慢慢写出来的恋爱书。', '记录'],
+        ['继续制造新的回忆', '时间线和同行清单都会越来越满，像一本慢慢写出来的恋爱书。', '记录'],
         ['今天适合说一句想你', '有些话不用等到节日才说，今天就很适合。', '想念']
       ];
       const item = notes[Math.abs(days || 0) % notes.length];
@@ -3083,7 +3067,7 @@ grant execute on function public.save_couple_site(text, jsonb, text) to anon, au
       const sorted = data.events
         .map((event, originalIndex) => ({ ...event, originalIndex }))
         .sort((a,b) => new Date(a.date) - new Date(b.date));
-      if (!sorted.length) { list.innerHTML = '<p class="empty">还没有时间轨迹节点。登录编辑后先添加第一个重要瞬间吧。</p>'; return; }
+      if (!sorted.length) { list.innerHTML = '<p class="empty">还没有时间线节点。登录编辑后先添加第一个重要瞬间吧。</p>'; return; }
       list.innerHTML = sorted.map((event, index) => `
         <article class="trajectory-event reveal ${index % 2 === 0 ? 'left' : 'right'}">
           <div class="trajectory-side">
@@ -3598,6 +3582,7 @@ grant execute on function public.save_couple_site(text, jsonb, text) to anon, au
 
     function renderDiary() {
       const list = document.getElementById('diaryList');
+      if (!list) return;
       const sorted = data.diaries
         .map((item, originalIndex) => ({ ...item, originalIndex }))
         .sort((a,b) => new Date(b.date) - new Date(a.date));
@@ -3609,12 +3594,12 @@ grant execute on function public.save_couple_site(text, jsonb, text) to anon, au
 
     function renderWishes() {
       const list = document.getElementById('wishList');
-      if (!data.wishes.length) { list.innerHTML = '<p class="empty">还没有约定。登录编辑后先写下一条只属于你们的约定吧。</p>'; return; }
+      if (!data.wishes.length) { list.innerHTML = '<p class="empty">还没有清单。登录编辑后先写下一条只属于你们的小目标吧。</p>'; return; }
       list.innerHTML = data.wishes.map((wish, index) => `
         <article class="card promise-card reveal ${wish.done ? 'done' : ''}">
           <div class="promise-top">
-            <span class="promise-tag">约定 ${String(index + 1).padStart(2, '0')}</span>
-            <span class="promise-state">${wish.done ? '已一起实现' : '正在慢慢完成'}</span>
+            <span class="promise-tag">清单 ${String(index + 1).padStart(2, '0')}</span>
+            <span class="promise-state">${wish.done ? '已点亮' : '慢慢完成中'}</span>
           </div>
           <strong>${escapeHTML(wish.title)}</strong>
           <p>${escapeHTML(wish.text)}</p>
@@ -3627,7 +3612,6 @@ grant execute on function public.save_couple_site(text, jsonb, text) to anon, au
       renderTimeline();
       renderAlbum();
       renderMusicPlayer();
-      renderDiary();
       renderWishes();
       requestAnimationFrame(enhanceReveal);
     }
@@ -3645,7 +3629,7 @@ grant execute on function public.save_couple_site(text, jsonb, text) to anon, au
       if (!isEditorUnlocked) { showToast('请先输入密码解锁编辑'); return; }
       if (!data.wishes[index]) return;
       data.wishes[index].done = !data.wishes[index].done;
-      await persistData(data.wishes[index].done ? '约定已完成' : '已取消完成状态');
+      await persistData(data.wishes[index].done ? '清单已点亮' : '已取消完成状态');
     }
     window.toggleWish = toggleWish;
 
@@ -3676,7 +3660,7 @@ grant execute on function public.save_couple_site(text, jsonb, text) to anon, au
     }
 
     function enhanceReveal() {
-      const items = document.querySelectorAll('section, .card, .album-card, .event, .diary-item, .wish');
+      const items = document.querySelectorAll('section, .card, .album-card, .event, .trajectory-event, .diary-item, .wish, .promise-card');
       items.forEach(el => el.classList.add('reveal'));
       if (!('IntersectionObserver' in window)) {
         items.forEach(el => el.classList.add('in'));
@@ -3796,21 +3780,31 @@ grant execute on function public.save_couple_site(text, jsonb, text) to anon, au
       data.siteName = document.getElementById('inputSiteName').value.trim() || defaultData.siteName;
       data.names = document.getElementById('inputNames').value.trim() || '我们';
       data.startDate = document.getElementById('inputStartDate').value || defaultData.startDate;
-      data.heroImage = document.getElementById('inputHeroImage').value.trim() || defaultData.heroImage;
+      const heroUrlInput = document.getElementById('inputHeroImage').value.trim();
+      const heroFileInput = document.getElementById('inputHeroFile');
+      const heroFile = heroFileInput && heroFileInput.files ? heroFileInput.files[0] : null;
+      if (heroFile) {
+        showToast('正在处理主页图片...');
+        data.heroImage = await compressImage(heroFile);
+        document.getElementById('inputHeroImage').value = '';
+        heroFileInput.value = '';
+      } else {
+        data.heroImage = heroUrlInput || data.heroImage || defaultData.heroImage;
+      }
       data.heroText = document.getElementById('inputHeroText').value.trim() || defaultData.heroText;
-      await persistData('基础信息已保存');
+      await persistData(heroFile ? '主页图片与基础信息已保存' : '基础信息已保存');
     });
 
     document.getElementById('addEvent').addEventListener('click', async () => {
       if (!ensureUnlocked()) return;
-      const date = requireValue('eventDate','事件日期');
-      const title = requireValue('eventTitle','事件标题');
-      const text = requireValue('eventText','事件内容');
+      const date = requireValue('eventDate','节点日期');
+      const title = requireValue('eventTitle','节点标题');
+      const text = requireValue('eventText','节点内容');
       if (!date || !title || !text) return;
       data.events.push({ date, title, text });
       document.getElementById('eventTitle').value = '';
       document.getElementById('eventText').value = '';
-      await persistData('时间轴已更新');
+      await persistData('时间线已更新');
     });
 
     document.getElementById('addPhoto').addEventListener('click', async () => {
@@ -3860,7 +3854,8 @@ grant execute on function public.save_couple_site(text, jsonb, text) to anon, au
       showToast('请粘贴照片链接或选择本地照片');
     });
 
-    document.getElementById('addDiary').addEventListener('click', async () => {
+    const addDiaryButton = document.getElementById('addDiary');
+    if (addDiaryButton) addDiaryButton.addEventListener('click', async () => {
       if (!ensureUnlocked()) return;
       const date = requireValue('diaryDate','日记日期');
       const title = requireValue('diaryTitle','日记标题');
@@ -3874,19 +3869,20 @@ grant execute on function public.save_couple_site(text, jsonb, text) to anon, au
 
     document.getElementById('addWish').addEventListener('click', async () => {
       if (!ensureUnlocked()) return;
-      const title = requireValue('wishTitle','愿望标题');
-      const text = requireValue('wishText','愿望说明');
+      const title = requireValue('wishTitle','清单标题');
+      const text = requireValue('wishText','清单说明');
       if (!title || !text) return;
       data.wishes.push({ title, text, done: false });
       document.getElementById('wishTitle').value = '';
       document.getElementById('wishText').value = '';
-      await persistData('约定已添加');
+      await persistData('清单已添加');
     });
 
-    document.getElementById('clearEvents').addEventListener('click', async () => { if (ensureUnlocked() && confirm('确定清空时间轴吗？')) { data.events = []; await persistData('时间轴已清空'); } });
+    document.getElementById('clearEvents').addEventListener('click', async () => { if (ensureUnlocked() && confirm('确定清空时间线吗？')) { data.events = []; await persistData('时间线已清空'); } });
     document.getElementById('clearPhotos').addEventListener('click', async () => { if (ensureUnlocked() && confirm('确定清空照片墙吗？')) { data.photos = []; resetPhotoForm(); await persistData('照片墙已清空'); } });
-    document.getElementById('clearDiaries').addEventListener('click', async () => { if (ensureUnlocked() && confirm('确定清空日记吗？')) { data.diaries = []; await persistData('日记已清空'); } });
-    document.getElementById('clearWishes').addEventListener('click', async () => { if (ensureUnlocked() && confirm('确定清空所有约定吗？')) { data.wishes = []; await persistData('约定已清空'); } });
+    const clearDiariesButton = document.getElementById('clearDiaries');
+    if (clearDiariesButton) clearDiariesButton.addEventListener('click', async () => { if (ensureUnlocked() && confirm('确定清空日记吗？')) { data.diaries = []; await persistData('日记已清空'); } });
+    document.getElementById('clearWishes').addEventListener('click', async () => { if (ensureUnlocked() && confirm('确定清空同行清单吗？')) { data.wishes = []; await persistData('同行清单已清空'); } });
     document.getElementById('resetAll').addEventListener('click', async () => { if (ensureUnlocked() && confirm('确定恢复默认示例吗？当前内容会被覆盖。')) { data = clone(defaultData); await persistData('已恢复默认示例'); } });
 
     document.getElementById('exportData').addEventListener('click', () => {
@@ -4053,7 +4049,8 @@ grant execute on function public.save_couple_site(text, jsonb, text) to anon, au
     }
 
     const today = new Date().toISOString().slice(0,10);
-    document.getElementById('diaryDate').value = today;
+    const diaryDateInput = document.getElementById('diaryDate');
+    if (diaryDateInput) diaryDateInput.value = today;
     document.getElementById('eventDate').value = today;
     document.getElementById('sqlBox').textContent = SUPABASE_SQL;
 
