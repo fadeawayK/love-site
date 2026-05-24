@@ -1479,6 +1479,241 @@
       .intro-click-heart { width: 168px; height: 168px; }
     }
 
+
+    /* === 定制版：全屏 3D 爱心粒子入口 + 歌词作为动态网页背景 === */
+    body {
+      padding-left: 0 !important;
+    }
+    header, main, footer, .floating-actions, .music-dock, .toast, .lightbox {
+      position: relative;
+      z-index: 4;
+    }
+    .lyric-sidebar {
+      display: none !important;
+    }
+    .lyric-bg-layer {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      overflow: hidden;
+      z-index: 1;
+      opacity: .9;
+      mix-blend-mode: multiply;
+    }
+    .lyric-bg-layer::before {
+      content: "";
+      position: absolute;
+      inset: -20%;
+      background:
+        radial-gradient(circle at 18% 24%, rgba(255,143,171,.16), transparent 28%),
+        radial-gradient(circle at 82% 70%, rgba(194,110,255,.12), transparent 28%),
+        radial-gradient(circle at 50% 42%, rgba(255,214,165,.10), transparent 34%);
+      filter: blur(2px);
+      animation: lyricBgAura 16s ease-in-out infinite alternate;
+    }
+    @keyframes lyricBgAura {
+      from { transform: translate3d(-2%, -1%, 0) scale(1); }
+      to { transform: translate3d(2%, 1.5%, 0) scale(1.04); }
+    }
+    .lyric-bg-current {
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      width: min(1080px, 92vw);
+      transform: translate(-50%, -50%);
+      text-align: center;
+      font-size: clamp(34px, 8vw, 104px);
+      line-height: 1.18;
+      font-weight: 1000;
+      letter-spacing: -.06em;
+      color: rgba(255, 95, 146, .105);
+      text-shadow:
+        0 0 34px rgba(255, 143, 171, .16),
+        0 0 70px rgba(194, 110, 255, .10);
+      filter: blur(.15px);
+      transform-origin: center;
+      animation: lyricCurrentFloat 6.8s ease-in-out infinite;
+      user-select: none;
+      white-space: normal;
+    }
+    @keyframes lyricCurrentFloat {
+      0%,100% { transform: translate(-50%, -50%) rotate(-2deg) scale(1); }
+      50% { transform: translate(-50%, calc(-50% - 18px)) rotate(2deg) scale(1.035); }
+    }
+    .lyric-bg-stream {
+      position: absolute;
+      inset: 0;
+    }
+    .lyric-bg-line {
+      position: absolute;
+      max-width: min(520px, 78vw);
+      padding: 7px 14px;
+      border-radius: 999px;
+      color: rgba(120, 67, 82, .17);
+      font-weight: 900;
+      font-size: clamp(15px, 2vw, 28px);
+      letter-spacing: .02em;
+      white-space: nowrap;
+      background: rgba(255,255,255,.08);
+      border: 1px solid rgba(255,255,255,.08);
+      filter: blur(.05px);
+      transform: translate3d(var(--x, 10vw), var(--y, 20vh), 0) rotate(var(--r, -8deg));
+      animation: lyricDrift var(--d, 18s) ease-in-out infinite alternate;
+      animation-delay: var(--delay, 0s);
+      user-select: none;
+    }
+    .lyric-bg-line.active {
+      color: rgba(232, 72, 122, .38);
+      background: rgba(255,255,255,.22);
+      text-shadow: 0 0 24px rgba(255,143,171,.28);
+      border-color: rgba(255,143,171,.12);
+      transform: translate3d(var(--x, 10vw), var(--y, 20vh), 0) rotate(var(--r, -8deg)) scale(1.08);
+    }
+    @keyframes lyricDrift {
+      0% { translate: -18px 8px; }
+      50% { translate: 12px -22px; }
+      100% { translate: 24px 12px; }
+    }
+    body.night .lyric-bg-layer { mix-blend-mode: screen; opacity: .72; }
+    body.night .lyric-bg-current { color: rgba(255, 198, 218, .13); }
+    body.night .lyric-bg-line { color: rgba(255, 230, 238, .18); background: rgba(255,255,255,.05); }
+    body.night .lyric-bg-line.active { color: rgba(255, 190, 213, .45); }
+
+    .music-dock {
+      display: grid !important;
+      left: 18px !important;
+      bottom: 18px !important;
+      width: 62px !important;
+      height: 62px !important;
+      padding: 4px !important;
+      border-radius: 50% !important;
+      background: rgba(255,255,255,.76) !important;
+      backdrop-filter: blur(18px);
+      border: 1px solid rgba(255,255,255,.72) !important;
+      box-shadow: 0 20px 60px rgba(255, 113, 157, .28) !important;
+      place-items: center;
+    }
+    .music-dock .dock-text,
+    .music-dock .dock-lyric,
+    .music-dock #dockNext {
+      display: none !important;
+    }
+    .music-dock button#dockPlay {
+      width: 52px !important;
+      height: 52px !important;
+      border-radius: 50% !important;
+      font-size: 21px !important;
+      padding: 0 !important;
+      background: radial-gradient(circle at 35% 24%, #fff 0 8%, #ffd7e4 13%, #ff8fab 48%, #b86cff 100%) !important;
+      color: #fff !important;
+      box-shadow: 0 12px 36px rgba(255, 112, 150, .42) !important;
+    }
+    .music-dock.playing {
+      animation: musicIconBreath 1.8s ease-in-out infinite;
+    }
+    @keyframes musicIconBreath {
+      0%,100% { transform: scale(1); }
+      50% { transform: scale(1.06); }
+    }
+    .floating-actions { right: 18px !important; bottom: 18px !important; }
+
+    .intro-gate {
+      cursor: pointer;
+      background:
+        radial-gradient(circle at 50% 42%, rgba(255,143,171,.28), transparent 26%),
+        radial-gradient(circle at 18% 18%, rgba(255,214,165,.18), transparent 26%),
+        radial-gradient(circle at 82% 76%, rgba(176,106,255,.18), transparent 32%),
+        linear-gradient(145deg, #120812 0%, #24112a 48%, #3a172e 100%) !important;
+    }
+    .intro-canvas {
+      z-index: 1;
+      opacity: 1 !important;
+      filter: saturate(1.16) contrast(1.06);
+    }
+    .intro-card {
+      pointer-events: none !important;
+      position: absolute !important;
+      inset: 0 !important;
+      width: 100% !important;
+      max-width: none !important;
+      height: 100% !important;
+      margin: 0 !important;
+      padding: clamp(26px, 4vw, 48px) 18px !important;
+      display: flex !important;
+      flex-direction: column !important;
+      align-items: center !important;
+      justify-content: space-between !important;
+      background: transparent !important;
+      border: 0 !important;
+      box-shadow: none !important;
+      backdrop-filter: none !important;
+      transform: none !important;
+      z-index: 2 !important;
+    }
+    .intro-card::before { display: none !important; }
+    .intro-badge {
+      background: rgba(255,255,255,.10) !important;
+      border-color: rgba(255,255,255,.20) !important;
+      color: rgba(255,255,255,.82) !important;
+    }
+    .intro-title {
+      margin-top: auto !important;
+      margin-bottom: 6px !important;
+      color: rgba(255,255,255,.92) !important;
+      text-shadow: 0 0 32px rgba(255,143,171,.56), 0 0 80px rgba(183,102,255,.28);
+    }
+    .intro-title span { color: #ffd7e3 !important; background: none !important; -webkit-text-fill-color: currentColor !important; }
+    .intro-subtitle {
+      margin-bottom: 32px !important;
+      color: rgba(255,245,249,.74) !important;
+      max-width: 680px !important;
+      text-shadow: 0 2px 16px rgba(0,0,0,.22);
+    }
+    .intro-click-heart,
+    .intro-3d-stage,
+    .intro-skip {
+      display: none !important;
+    }
+    .intro-card::after {
+      content: "点击 3D 爱心粒子进入";
+      margin-bottom: auto;
+      padding: 12px 18px;
+      border-radius: 999px;
+      color: rgba(255,255,255,.88);
+      background: rgba(255,255,255,.12);
+      border: 1px solid rgba(255,255,255,.20);
+      box-shadow: 0 18px 60px rgba(255,143,171,.22);
+      font-weight: 900;
+      letter-spacing: .12em;
+      animation: introPromptPulse 1.8s ease-in-out infinite;
+    }
+    @keyframes introPromptPulse {
+      0%,100% { opacity: .74; transform: translateY(0); }
+      50% { opacity: 1; transform: translateY(-4px); }
+    }
+    .intro-gate.hide .intro-card { opacity: 0; transform: scale(.985) !important; }
+
+    .section-particle-canvas.show {
+      opacity: 1 !important;
+      background: radial-gradient(circle at 50% 45%, rgba(255,255,255,.30), rgba(255,234,243,.16) 42%, rgba(255,255,255,0) 72%);
+    }
+    body.page-particle-switch header,
+    body.page-particle-switch main,
+    body.page-particle-switch footer {
+      filter: blur(10px) saturate(1.26) brightness(1.04) !important;
+      transform: scale(.975) !important;
+    }
+
+    @media (max-width: 760px) {
+      .lyric-bg-current { font-size: clamp(34px, 13vw, 72px); width: 96vw; }
+      .lyric-bg-line { font-size: 15px; max-width: 78vw; }
+      .music-dock { left: 12px !important; bottom: 12px !important; width: 56px !important; height: 56px !important; }
+      .music-dock button#dockPlay { width: 48px !important; height: 48px !important; }
+      .floating-actions { right: 12px !important; bottom: 12px !important; }
+      .intro-title { font-size: clamp(34px, 12vw, 62px) !important; }
+      .intro-subtitle { font-size: 14px !important; margin-bottom: 24px !important; }
+    }
+
   </style>
 </head>
 <body>
@@ -1486,6 +1721,10 @@
   <canvas class="section-particle-canvas" id="sectionParticleCanvas" aria-hidden="true"></canvas>
 
   <canvas class="romantic-bg-canvas" id="romanticBgCanvas" aria-hidden="true"></canvas>
+  <div class="lyric-bg-layer" id="lyricBgLayer" aria-hidden="true">
+    <div class="lyric-bg-current" id="lyricBgCurrent">点一下音乐图标，歌词会在页面里浮动</div>
+    <div class="lyric-bg-stream" id="lyricBgStream"></div>
+  </div>
   <div class="intro-gate" id="introGate" role="dialog" aria-modal="true" aria-label="3D 粒子开场动画">
     <canvas class="intro-canvas" id="introCanvas" aria-hidden="true"></canvas>
     <div class="intro-card">
@@ -3863,6 +4102,215 @@ grant execute on function public.save_couple_site(text, jsonb, text) to anon, au
       });
       window.addEventListener('resize', resize, { passive: true });
       resize();
+    }
+
+
+
+    /* === 终版覆盖：歌词做成整页动态背景，开场点击 3D 爱心粒子进入 === */
+    function getLyricTextPool() {
+      if (Array.isArray(lyricLines) && lyricLines.length) {
+        return lyricLines.map(line => line.text).filter(Boolean);
+      }
+      return ['恶作剧 - 林依晨', '我找不到很好的原因', '去阻挡这一切的亲密', '这感觉太奇异', '我抱歉不能说明'];
+    }
+
+    function updateLyricBackgroundPool(activeIndex = -1) {
+      const stream = document.getElementById('lyricBgStream');
+      if (!stream) return;
+      const pool = getLyricTextPool();
+      const count = Math.min(18, Math.max(8, pool.length));
+      if (stream.dataset.poolSize === String(pool.length) && stream.children.length) {
+        Array.from(stream.children).forEach((el, i) => {
+          el.classList.toggle('active', i === activeIndex % Math.max(count, 1));
+        });
+        return;
+      }
+      stream.dataset.poolSize = String(pool.length);
+      stream.innerHTML = Array.from({ length: count }, (_, i) => {
+        const text = pool[i % pool.length] || 'Love Memory';
+        const x = (6 + ((i * 29) % 84));
+        const y = (8 + ((i * 47) % 86));
+        const r = -16 + ((i * 11) % 32);
+        const d = 13 + (i % 7) * 2.2;
+        const delay = -(i % 9) * 1.2;
+        return `<span class="lyric-bg-line" data-bg-lyric-index="${i}" style="--x:${x}vw;--y:${y}vh;--r:${r}deg;--d:${d}s;--delay:${delay}s;">${escapeHTML(text)}</span>`;
+      }).join('');
+    }
+
+    function setFloatingLyric(text, activeIndex = -1) {
+      const current = document.getElementById('lyricBgCurrent');
+      if (current && text) current.textContent = text;
+      updateLyricBackgroundPool(activeIndex);
+      const stream = document.getElementById('lyricBgStream');
+      if (stream) {
+        const children = Array.from(stream.children);
+        children.forEach((el, i) => el.classList.toggle('active', activeIndex >= 0 && i === activeIndex % Math.max(children.length, 1)));
+      }
+    }
+
+    function renderLyricLines(message = '暂无歌词') {
+      const panel = document.getElementById('lyricsPanel');
+      activeLyricIndex = -1;
+      const dockLyric = document.getElementById('dockLyric');
+      if (!lyricLines.length) {
+        if (panel) panel.innerHTML = `<div class="lyric-empty">${escapeHTML(message)}</div>`;
+        if (dockLyric) dockLyric.textContent = message || '暂无歌词';
+        setFloatingLyric(message || '点一下音乐图标，歌词会在页面里浮动', -1);
+        return;
+      }
+      if (dockLyric) dockLyric.textContent = '歌词已加载，点音乐图标播放';
+      if (panel) {
+        panel.innerHTML = lyricLines.map((line, index) => `
+          <div class="lyric-line" data-lyric-index="${index}">${escapeHTML(line.text)}</div>
+        `).join('');
+      }
+      setFloatingLyric('点一下音乐图标，歌词会随着音乐浮动', -1);
+    }
+
+    function updateSyncedLyrics() {
+      const audio = document.getElementById('loveAudio');
+      if (!audio || !lyricLines.length) return;
+      const currentTime = audio.currentTime || 0;
+      let index = lyricLines.findIndex((line, i) => currentTime + 0.18 < line.time && i > 0) - 1;
+      if (index < 0) {
+        index = lyricLines.reduce((last, line, i) => line.time <= currentTime + 0.18 ? i : last, -1);
+      }
+      if (index < 0) index = 0;
+      if (index === activeLyricIndex) return;
+      const panel = document.getElementById('lyricsPanel');
+      if (panel) {
+        const previous = panel.querySelector('.lyric-line.active');
+        if (previous) previous.classList.remove('active');
+        const current = panel.querySelector(`[data-lyric-index="${index}"]`);
+        if (current) {
+          current.classList.add('active');
+          current.scrollIntoView({ block: 'center', behavior: 'smooth' });
+        }
+      }
+      const lineText = lyricLines[index] ? lyricLines[index].text : '';
+      const dockLyric = document.getElementById('dockLyric');
+      if (dockLyric && lineText) dockLyric.textContent = lineText;
+      setFloatingLyric(lineText || '♪', index);
+      activeLyricIndex = index;
+    }
+
+    function initRomanticIntro() {
+      const gate = document.getElementById('introGate');
+      const canvas = document.getElementById('introCanvas');
+      if (!gate || !canvas) return;
+      const ctx = canvas.getContext('2d');
+      let width = 0, height = 0, ratio = 1;
+      let particles = [];
+      let rafId = 0;
+      let time = 0;
+      let exploding = false;
+      let pointer = { x: window.innerWidth / 2, y: window.innerHeight / 2 };
+      const reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+      function heartPoint(i, total) {
+        const a = (i / total) * Math.PI * 2;
+        const x = 16 * Math.pow(Math.sin(a), 3);
+        const y = -(13 * Math.cos(a) - 5 * Math.cos(2 * a) - 2 * Math.cos(3 * a) - Math.cos(4 * a));
+        return { x, y };
+      }
+      function resize() {
+        ratio = Math.min(window.devicePixelRatio || 1, 2);
+        width = canvas.clientWidth || window.innerWidth;
+        height = canvas.clientHeight || window.innerHeight;
+        canvas.width = Math.floor(width * ratio);
+        canvas.height = Math.floor(height * ratio);
+        ctx.setTransform(ratio, 0, 0, ratio, 0, 0);
+        const total = reduceMotion ? 260 : Math.min(1600, Math.floor(width * height / 760));
+        const heartScale = Math.min(width, height) / 34;
+        particles = Array.from({ length: total }, (_, i) => {
+          const hp = heartPoint(i, total);
+          const layer = (Math.random() - .5);
+          return {
+            x: (Math.random() - .5) * width * 1.8,
+            y: (Math.random() - .5) * height * 1.5,
+            z: (Math.random() - .5) * 1200,
+            tx: hp.x * heartScale + (Math.random() - .5) * 15,
+            ty: hp.y * heartScale + (Math.random() - .5) * 15,
+            tz: layer * 520 + Math.sin(i * .17) * 80,
+            vx: 0, vy: 0, vz: 0,
+            r: .7 + Math.random() * 2.55,
+            hue: Math.random() < .72 ? 334 + Math.random() * 24 : 26 + Math.random() * 38,
+            seed: Math.random() * Math.PI * 2
+          };
+        });
+      }
+      function project(x, y, z, spinX, spinY, spinZ) {
+        const cy = Math.cos(spinY), sy = Math.sin(spinY);
+        const cx = Math.cos(spinX), sx = Math.sin(spinX);
+        const cz = Math.cos(spinZ), sz = Math.sin(spinZ);
+        let rx = x * cy - z * sy;
+        let rz = x * sy + z * cy;
+        let ry = y * cx - rz * sx;
+        rz = y * sx + rz * cx;
+        const fx = rx * cz - ry * sz;
+        const fy = rx * sz + ry * cz;
+        const depth = 980;
+        const scale = depth / (depth + rz);
+        return { x: width / 2 + fx * scale, y: height / 2 + fy * scale, scale, z: rz };
+      }
+      function draw() {
+        time += .0085;
+        ctx.clearRect(0, 0, width, height);
+        const bg = ctx.createRadialGradient(width/2, height/2, 0, width/2, height/2, Math.max(width,height) * .72);
+        bg.addColorStop(0, 'rgba(255,143,171,.24)');
+        bg.addColorStop(.34, 'rgba(185,102,255,.10)');
+        bg.addColorStop(1, 'rgba(0,0,0,0)');
+        ctx.fillStyle = bg;
+        ctx.fillRect(0, 0, width, height);
+        const spinY = time * .72 + (pointer.x - width/2) / Math.max(width, 1) * .38;
+        const spinX = Math.sin(time * .82) * .22 + (pointer.y - height/2) / Math.max(height, 1) * .18;
+        const spinZ = Math.sin(time * .35) * .05;
+        const sorted = particles.slice().sort((a,b) => b.z - a.z);
+        sorted.forEach(p => {
+          if (exploding) {
+            p.x += p.vx; p.y += p.vy; p.z += p.vz;
+            p.vx *= 1.014; p.vy *= 1.014; p.vz *= 1.008;
+          } else {
+            const breathe = 1 + Math.sin(time * 2.4 + p.seed) * .052;
+            p.x += (p.tx * breathe - p.x) * .032;
+            p.y += (p.ty * breathe - p.y) * .032;
+            p.z += (p.tz - p.z) * .032;
+          }
+          const q = project(p.x, p.y, p.z, spinX, spinY, spinZ);
+          if (q.scale < .12 || !Number.isFinite(q.x) || !Number.isFinite(q.y)) return;
+          const alpha = Math.max(.12, Math.min(.96, q.scale * .95));
+          const radius = p.r * q.scale * (1 + Math.sin(time * 7 + p.seed) * .18);
+          ctx.beginPath();
+          ctx.arc(q.x, q.y, radius, 0, Math.PI * 2);
+          ctx.fillStyle = `hsla(${p.hue}, 98%, ${70 + q.scale * 14}%, ${alpha})`;
+          ctx.shadowColor = `hsla(${p.hue}, 98%, 76%, .95)`;
+          ctx.shadowBlur = 22 * q.scale;
+          ctx.fill();
+          ctx.shadowBlur = 0;
+        });
+        rafId = requestAnimationFrame(draw);
+      }
+      function explodeAndEnter(event) {
+        if (gate.classList.contains('hide') || exploding) return;
+        exploding = true;
+        particles.forEach(p => {
+          const len = Math.hypot(p.x, p.y, p.z) || 1;
+          p.vx = p.x / len * (9 + Math.random() * 18);
+          p.vy = p.y / len * (9 + Math.random() * 18);
+          p.vz = p.z / len * (9 + Math.random() * 18);
+        });
+        setTimeout(() => {
+          gate.classList.add('hide');
+          tryPlayMusic(true);
+          popHeart(event && event.clientX ? event.clientX : width / 2, event && event.clientY ? event.clientY : height / 2);
+          setTimeout(() => { cancelAnimationFrame(rafId); gate.remove(); }, 920);
+        }, 360);
+      }
+      gate.addEventListener('pointermove', e => { pointer = { x: e.clientX, y: e.clientY }; });
+      gate.addEventListener('click', explodeAndEnter);
+      window.addEventListener('resize', resize, { passive: true });
+      resize();
+      draw();
     }
 
     initAmbientParticles();
