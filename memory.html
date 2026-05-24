@@ -1772,6 +1772,100 @@ grant execute on function public.save_couple_site(text, jsonb, text) to anon, au
       if (dock) dock.classList.toggle('playing', playing);
     }
 
+
+    function parseLrcTimeStamp(stamp) {
+      const parts = String(stamp || '').split(':').map(Number);
+      if (parts.length < 2 || parts.some(value => Number.isNaN(value))) return null;
+      const seconds = parts.pop();
+      const minutes = parts.pop() || 0;
+      const hours = parts.pop() || 0;
+      return hours * 3600 + minutes * 60 + seconds;
+    }
+
+    function parseLrcText(text) {
+      const result = [];
+      const timeTag = /\[(\d{1,2}:\d{2}(?:\.\d{1,3})?)\]/g;
+      String(text || '').split(/\r?\n/).forEach(line => {
+        const matches = [...line.matchAll(timeTag)];
+        if (!matches.length) return;
+        const lyric = line.replace(timeTag, '').trim() || '♪';
+        matches.forEach(match => {
+          const time = parseLrcTimeStamp(match[1]);
+          if (time !== null) result.push({ time, text: lyric });
+        });
+      });
+      return result.sort((a, b) => a.time - b.time);
+    }
+
+    function renderLyricLines(message = '暂无歌词') {
+      const panel = document.getElementById('lyricsPanel');
+      if (!panel) return;
+      activeLyricIndex = -1;
+      if (!lyricLines.length) {
+        panel.innerHTML = `<div class="lyric-empty">${escapeHTML(message)}</div>`;
+        return;
+      }
+      panel.innerHTML = lyricLines.map((line, index) => `
+        <div class="lyric-line" data-lyric-index="${index}">${escapeHTML(line.text)}</div>
+      `).join('');
+    }
+
+    async function loadLyricsForTrack(track) {
+      const panel = document.getElementById('lyricsPanel');
+      if (!panel) return;
+      const lyricUrl = String(track && (track.lyricUrl || track.lrc) || '').trim();
+      if (!track) {
+        loadedLyricUrl = '';
+        lyricLines = [];
+        renderLyricLines('当前没有歌曲');
+        return;
+      }
+      if (!lyricUrl) {
+        loadedLyricUrl = '';
+        lyricLines = [];
+        renderLyricLines('这首歌还没有添加歌词链接');
+        return;
+      }
+      if (loadedLyricUrl === lyricUrl && lyricLines.length) return;
+      loadedLyricUrl = lyricUrl;
+      lyricLines = [];
+      activeLyricIndex = -1;
+      panel.innerHTML = '<div class="lyric-empty">歌词加载中...</div>';
+      try {
+        const response = await fetch(lyricUrl, { cache: 'no-store' });
+        if (!response.ok) throw new Error(`HTTP ${response.status}`);
+        const lrcText = await response.text();
+        lyricLines = parseLrcText(lrcText);
+        renderLyricLines(lyricLines.length ? '' : '歌词文件已读取，但没有识别到时间轴歌词');
+        updateSyncedLyrics();
+      } catch (error) {
+        lyricLines = [];
+        renderLyricLines(`歌词加载失败，请检查链接：${lyricUrl}`);
+      }
+    }
+
+    function updateSyncedLyrics() {
+      const audio = document.getElementById('loveAudio');
+      if (!audio || !lyricLines.length) return;
+      const currentTime = audio.currentTime || 0;
+      let index = lyricLines.findIndex((line, i) => currentTime + 0.18 < line.time && i > 0) - 1;
+      if (index < 0) {
+        index = lyricLines.reduce((last, line, i) => line.time <= currentTime + 0.18 ? i : last, -1);
+      }
+      if (index < 0) index = 0;
+      if (index === activeLyricIndex) return;
+      const panel = document.getElementById('lyricsPanel');
+      if (!panel) return;
+      const previous = panel.querySelector('.lyric-line.active');
+      if (previous) previous.classList.remove('active');
+      const current = panel.querySelector(`[data-lyric-index="${index}"]`);
+      if (current) {
+        current.classList.add('active');
+        current.scrollIntoView({ block: 'center', behavior: 'smooth' });
+      }
+      activeLyricIndex = index;
+    }
+
     function renderMusicManager() {
       const box = document.getElementById('musicManageList');
       if (!box) return;
@@ -1862,7 +1956,12 @@ grant execute on function public.save_couple_site(text, jsonb, text) to anon, au
         await audio.play();
         setMusicTip('音乐播放中');
       } catch (error) {
-        setMusicTip('浏览器拦截了自动播放，点一下播放按钮即可。');
+        if (audio.error) {
+          const url = track && track.url ? track.url : '音乐链接';
+          setMusicTip(`音乐加载失败，请检查 ${url} 是否能直接打开。`);
+        } else {
+          setMusicTip('浏览器拦截了自动播放，点一下播放按钮即可。');
+        }
       }
       updateMusicButtons();
     }
@@ -2316,6 +2415,15 @@ grant execute on function public.save_couple_site(text, jsonb, text) to anon, au
     });
     document.getElementById('loveAudio').addEventListener('play', updateMusicButtons);
     document.getElementById('loveAudio').addEventListener('pause', updateMusicButtons);
+    document.getElementById('loveAudio').addEventListener('error', () => {
+      const track = currentTrack();
+      setMusicTip(`音乐加载失败：请检查 ${track && track.url ? track.url : '音乐链接'} 是否能直接打开。`);
+      updateMusicButtons();
+    });
+    document.getElementById('loveAudio').addEventListener('canplay', () => {
+      const audio = document.getElementById('loveAudio');
+      if (audio && audio.paused) setMusicTip('音乐已加载，点播放即可。');
+    });
     document.getElementById('loveAudio').addEventListener('timeupdate', updateSyncedLyrics);
     document.getElementById('loveAudio').addEventListener('seeked', updateSyncedLyrics);
     document.getElementById('loveAudio').addEventListener('ended', () => nextTrack(1, true));
